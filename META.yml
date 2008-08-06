@@ -1,0 +1,24 @@
+---
+name: TAP-Harness-JUnit
+version: 0.21
+author:
+  - 'Lubomir Rintel (Good Data) <lubo.rintel@gooddata.com>'
+abstract: Generate JUnit compatible output from TAP results
+license: perl
+resources:
+  license: http://dev.perl.org/licenses/
+requires:
+  File::Temp: 0
+  Scalar::Util: 0
+  TAP::Harness: 3.05
+  TAP::Parser: 0
+  Test::More: 0
+  XML::Simple: 0
+provides:
+  TAP::Harness::JUnit:
+    file: lib/TAP/Harness/JUnit.pm
+    version: 0.21
+generated_by: Module::Build version 0.2807
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.2.html
+  version: 1.2

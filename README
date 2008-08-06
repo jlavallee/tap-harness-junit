@@ -1,0 +1,31 @@
+This is TAP::Harness::JUnit module.
+
+It provides a test harness that runs TAP tests and outputs
+JUnit-compatible XML.
+
+Before building it yourself, you may prefer to fetch the package from your
+Operating System distribution, if one exists. Here's how would you install
+it in Fedora:
+
+# yum -y install 'perl(TAP::Harness::JUnit)'
+
+Otherwise, follow the usual Module::Build convention:
+
+$ perl Build.pl
+# ./Build
+# ./Build install
+
+The build script will issue a warning when any of required modules is
+missing or wrong version.
+
+See the POD documentation for more information (on how to use the module,
+licensing, copyright, etc.):
+
+$ perldoc TAP::Harness::JUnit
+
+Before installing the module, you can do:
+
+$ perldoc lib/TAP/Harness/JUnit.pm
+
+--
+Mon Jul 28 2008 Lubomir Rintel (Good Data)

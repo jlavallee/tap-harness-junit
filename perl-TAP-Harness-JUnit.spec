@@ -1,5 +1,5 @@
 Name:           perl-TAP-Harness-JUnit
-Version:        0.20
+Version:        0.21
 Release:        1%{?dist}
 Summary:        Generate JUnit compatible output from TAP results
 License:        GPL+ or Artistic
@@ -39,8 +39,7 @@ find $RPM_BUILD_ROOT -depth -type d -exec rmdir {} 2>/dev/null \;
 
 
 %check
-# No tests exist yet
-#./Build test
+./Build test
 
 
 %clean
@@ -55,6 +54,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Aug 06 2008 Lubomir Rintel (Good Data) <lubo.rintel@gooddata.com> 0.21-1
+- New usptream release
+
 * Thu Jul 31 2008 Lubomir Rintel (Good Data) <lubo.rintel@gooddata.com> 0.20-1
 - New usptream release
 

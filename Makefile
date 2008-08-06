@@ -1,5 +1,7 @@
 include ../common/common.mk
 
+TARGET=gdc-tools
+
 srpm:
 	perl Build.PL
 	./Build dist

@@ -12,6 +12,11 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 BuildRequires:  perl(Module::Build)
 Requires:       perl(TAP::Harness) >= 3.05
+BuildRequires:  perl(File::Temp)  
+BuildRequires:  perl(Scalar::Util)  
+BuildRequires:  perl(TAP::Harness) >= 3.05
+BuildRequires:  perl(TAP::Parser)  
+BuildRequires:  perl(XML::Simple)  
 Requires:       perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 
 %description
@@ -54,6 +59,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Aug 06 2008 Lubomir Rintel (Good Data) <lubo.rintel@gooddata.com> 0.21-2
+- Add BRs for enabled tests
+
 * Wed Aug 06 2008 Lubomir Rintel (Good Data) <lubo.rintel@gooddata.com> 0.21-1
 - New usptream release
 

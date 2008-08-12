@@ -35,7 +35,7 @@ use TAP::Parser;
 use XML::Simple;
 use Scalar::Util qw/blessed/;
 
-our $VERSION = '0.21';
+our $VERSION = '0.22';
 
 =head2 new
 
@@ -100,8 +100,6 @@ sub parsetest {
 		# Counters
 		if ($result->type eq 'plan') {
 			$xml->{tests} = $result->tests_planned;
-		} elsif ($result->type eq 'test' && $result->ok eq 'not ok') {
-			$xml->{errors}++;
 		}
 
 		# Comments
@@ -111,6 +109,10 @@ sub parsetest {
 
 		# Test case
 		if ($result->type eq 'test') {
+			# JUnit can't express these -- pretend they do not exist
+			$result->directive eq 'TODO' and next;
+			$result->directive eq 'SKIP' and next;
+
 			my $test = {
 				'time' => 0,
 				name => $result->description,
@@ -127,6 +129,7 @@ sub parsetest {
 					message => $result->raw,
 					content => $comment,
 				}];
+				$xml->{errors}++;
 			};
 
 			push @{$xml->{testcase}}, $test;

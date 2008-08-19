@@ -218,6 +218,19 @@ JUnit XML schema was obtained from L<http://jra1mw.cvs.cern.ch:8180/cgi-bin/jra1
 
 This module was partly inspired by Michael Peters' I<TAP::Harness::Archive>.
 
+=head1 BUGS
+
+Test return value is ignored. This is actually not a bug, I<TAP::Parser> doesn't present
+the fact and TAP specification does not require that anyway.
+
+Test durations are always set to 0 seconds.
+
+The comments that are above the C<ok> or C<not ok> are considered the output
+of the test. This, though being more logical, is against TAP specification.
+
+L<XML::Simple> is used to generate the output. It is suboptimal and involves
+some hacks.
+
 =head1 AUTHOR
 
 Lubomir Rintel (Good Data) C<< <lubo.rintel@gooddata.com> >>

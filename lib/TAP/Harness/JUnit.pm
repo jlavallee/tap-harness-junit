@@ -94,6 +94,7 @@ sub parsetest {
 
 	my $parser = new TAP::Parser ({'exec' => ['/bin/cat', $self->{__rawtapdir}.'/'.$file]});
 
+	my $tests_run = 0;
 	my $comment = ''; # Comment agreggator
 	while ( my $result = $parser->next ) {
 
@@ -107,8 +108,15 @@ sub parsetest {
 			$comment .= $result->comment."\n";
 		}
 
+		# Errors
+		if ($result->type eq 'unknown') {
+			$comment .= $result->raw."\n";
+		}
+
 		# Test case
 		if ($result->type eq 'test') {
+			$tests_run++;
+
 			# JUnit can't express these -- pretend they do not exist
 			$result->directive eq 'TODO' and next;
 			$result->directive eq 'SKIP' and next;
@@ -136,9 +144,24 @@ sub parsetest {
 			$comment = '';
 		}
 
-
 		# Log
 		$xml->{'system-out'}->[0] .= $result->raw."\n";
+	}
+
+	# Detect bad plan
+	if ($xml->{failures} = $xml->{tests} - $tests_run) {
+		# Fake a failed test
+		push @{$xml->{testcase}}, {
+			'time' => 0,
+			name => 'Test died too soon, some test did not execute.',
+			classname => $name,
+			failure => {
+				type => 'Plan',
+				message => 'Some test were not executed. The test died prematurely.',
+				content => 'Bad plan',
+			},
+		};
+		$xml->{errors}++;
 	}
 
 	# Add this suite to XML

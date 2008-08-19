@@ -1,6 +1,6 @@
 Name:           perl-TAP-Harness-JUnit
 Version:        0.22
-Release:        0.1%{?dist}
+Release:        1%{?dist}
 Summary:        Generate JUnit compatible output from TAP results
 License:        GPL+ or Artistic
 Group:          Development/Libraries
@@ -59,6 +59,12 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Aug 19 2008 Lubomir Rintel (Good Data) <lubo.rintel@gooddata.com> 0.22-1
+- New upstream release
+- Enhanced documentation
+- Fixed handling of tests with bad plan
+- Ignore SKIP and TODO tests in JUnit
+
 * Wed Aug 06 2008 Lubomir Rintel (Good Data) <lubo.rintel@gooddata.com> 0.21-2
 - Add BRs for enabled tests
 

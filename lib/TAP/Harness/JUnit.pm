@@ -105,7 +105,9 @@ sub parsetest {
 
 		# Comments
 		if ($result->type eq 'comment') {
-			$comment .= $result->comment."\n";
+			#$comment .= $result->comment."\n";
+			# ->comment has leading whitespace stripped
+			$result->raw =~ /^# / and $comment .= $1."\n";
 		}
 
 		# Errors

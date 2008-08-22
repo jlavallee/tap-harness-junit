@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuites>
+  <testsuite name="Has a plan_ successful tests_ just too small amount of them" errors="1" failures="7" tests="10" time="0">
+    <system-out>1..10
+ok 1
+ok 2
+ok 3
+# Looks like you planned 10 tests but only ran 3.
+</system-out>
+    <testcase name="" classname="Has a plan_ successful tests_ just too small amount of them" time="0" />
+    <testcase name="" classname="Has a plan_ successful tests_ just too small amount of them" time="0" />
+    <testcase name="" classname="Has a plan_ successful tests_ just too small amount of them" time="0" />
+    <testcase name="Test died too soon, some test did not execute." classname="Has a plan_ successful tests_ just too small amount of them" time="0">
+      <failure message="Some test were not executed. The test died prematurely." type="Plan">Bad plan</failure>
+    </testcase>
+  </testsuite>
+</testsuites>

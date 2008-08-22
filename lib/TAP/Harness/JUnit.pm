@@ -59,6 +59,9 @@ sub new {
 	my $xmlfile = $args->{xmlfile} or
 		$class->_croak("'xmlfile' argument is mandatory");
 
+	defined $args->{merge} or
+		warn 'You should consider using "merge" parameter. See BUGS section of TAP::Harness::JUnit manual';
+
 	# Get the name of raw perl dump directory
 	my $rawtapdir = $ENV{PERL_TEST_HARNESS_DUMP_TAP};
 	$rawtapdir = $args->{rawtapdir} unless $rawtapdir;
@@ -86,7 +89,7 @@ sub parsetest {
 		name => $name,
 		failures => 0,
 		errors => 0,
-		tests => 0,
+		tests => undef,
 		'time' => 0,
 		testcase => [],
 		'system-out' => [''],
@@ -105,9 +108,23 @@ sub parsetest {
 
 		# Comments
 		if ($result->type eq 'comment') {
+			# See BUGS
+			if ($result->comment =~ /Looks like your test died/) {
+				push @{$xml->{testcase}}, {
+					'time' => 0,
+					name => $result->comment,
+					classname => $name,
+					failure => {
+						type => 'Died',
+						message => $result->comment,
+						content => $result->raw,
+					},
+				};
+			}
+
 			#$comment .= $result->comment."\n";
 			# ->comment has leading whitespace stripped
-			$result->raw =~ /^# / and $comment .= $1."\n";
+			$result->raw =~ /^# (.*)/ and $comment .= $1."\n";
 		}
 
 		# Errors
@@ -148,6 +165,22 @@ sub parsetest {
 
 		# Log
 		$xml->{'system-out'}->[0] .= $result->raw."\n";
+	}
+
+	# Detect no plan
+	unless (defined $xml->{tests}) {
+		# Fake a failed test
+		push @{$xml->{testcase}}, {
+			'time' => 0,
+			name => 'Test died too soon, even before plan.',
+			classname => $name,
+			failure => {
+				type => 'Plan',
+				message => 'The test suite died before a plan was produced. You need to have a plan.',
+				content => 'No plan',
+			},
+		};
+		$xml->{errors}++;
 	}
 
 	# Detect bad plan
@@ -224,6 +257,12 @@ This module was partly inspired by Michael Peters' I<TAP::Harness::Archive>.
 
 Test return value is ignored. This is actually not a bug, I<TAP::Parser> doesn't present
 the fact and TAP specification does not require that anyway.
+
+Note that this may be a problem when running I<Test::More> tests with C<no_plan>,
+since it will add a plan matching the number of tests actually run even in case
+the test dies. No not do that -- always write a plan! In case it's not possible,
+pass C<merge> argument when creating a I<TAP::Harness::JUnit> instance, and the
+harness will detect such failures by matching certain comments.
 
 Test durations are always set to 0 seconds.
 

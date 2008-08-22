@@ -4,3 +4,10 @@ MANIFEST			This list of files
 META.yml			Metadata
 README				How to build and install
 t/use.t				Simple test
+t/outputs.t			Test that runs sample tests and compares outputs
+t/tests/badplan.xml
+t/tests/resultcode.xml
+t/tests/funkyindent.xml
+t/tests/badplan.pl
+t/tests/funkyindent.pl
+t/tests/resultcode.pl

@@ -35,7 +35,7 @@ use TAP::Parser;
 use XML::Simple;
 use Scalar::Util qw/blessed/;
 
-our $VERSION = '0.22';
+our $VERSION = '0.23';
 
 =head2 new
 

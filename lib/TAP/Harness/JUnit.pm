@@ -35,7 +35,7 @@ use TAP::Parser;
 use XML::Simple;
 use Scalar::Util qw/blessed/;
 
-our $VERSION = '0.23';
+our $VERSION = '0.24';
 
 =head2 new
 
@@ -80,6 +80,28 @@ sub new {
 	return $self;
 }
 
+sub uniquename {
+	my $xml = shift;
+	my $name = shift;
+	my $number = shift; # not mandatory
+
+	my $newname = $name;
+
+	# Beautify a bit -- strip leading "- "
+	# (that is added by Test::More)
+	$newname =~ s/^[\s-]*//;
+
+	$newname .= " ($number)" if defined $number;
+
+	foreach my $testcase (@{$xml->{testcase}}) {
+		if ($newname eq $testcase->{name}) {
+			return uniquename ($xml, $name, defined $number ? $number + 1 : 1);
+		}
+	}
+
+	return $newname;
+}
+
 sub parsetest {
 	my $self = shift;
 	my $file = shift;
@@ -112,7 +134,7 @@ sub parsetest {
 			if ($result->comment =~ /Looks like your test died/) {
 				push @{$xml->{testcase}}, {
 					'time' => 0,
-					name => $result->comment,
+					name => uniquename ($xml, 'Test returned failure'),
 					classname => $name,
 					failure => {
 						type => 'Died',
@@ -142,13 +164,9 @@ sub parsetest {
 
 			my $test = {
 				'time' => 0,
-				name => $result->description,
+				name => uniquename ($xml, $result->description),
 				classname => $name,
 			};
-
-			# Beautify a bit -- strip leading "- "
-			# (that is added by Test::More)
-			$test->{name} =~ s/^[\s-]*//;
 
 			if ($result->ok eq 'not ok') {
 				$test->{failure} = [{
@@ -172,7 +190,7 @@ sub parsetest {
 		# Fake a failed test
 		push @{$xml->{testcase}}, {
 			'time' => 0,
-			name => 'Test died too soon, even before plan.',
+			name => uniquename ($xml, 'Test died too soon, even before plan.'),
 			classname => $name,
 			failure => {
 				type => 'Plan',
@@ -188,7 +206,7 @@ sub parsetest {
 		# Fake a failed test
 		push @{$xml->{testcase}}, {
 			'time' => 0,
-			name => 'Test died too soon, some test did not execute.',
+			name => uniquename ($xml, 'Test died too soon, some test did not execute.'),
 			classname => $name,
 			failure => {
 				type => 'Plan',
@@ -224,7 +242,7 @@ sub runtests {
 		# Unfortunatelly, they don't escape special characters.
 		# '/'-s and family will result in incorrect URLs.
 		# Filed here: https://hudson.dev.java.net/issues/show_bug.cgi?id=2167
-		$comment =~ s/[^a-zA-Z0-9 ]/_/g;
+		$comment =~ s/[^a-zA-Z0-9, ]/_/g;
 
 		$self->parsetest ($file, $comment);
 	}

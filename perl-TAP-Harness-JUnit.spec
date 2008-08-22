@@ -1,6 +1,6 @@
 Name:           perl-TAP-Harness-JUnit
-Version:        0.23
-Release:        0.2%{?dist}
+Version:        0.24
+Release:        0.1%{?dist}
 Summary:        Generate JUnit compatible output from TAP results
 License:        GPL+ or Artistic
 Group:          Development/Libraries

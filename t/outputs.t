@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-#my $record = 1;
+my $record = $ENV{T_REC};
 
 use TAP::Harness::JUnit;
 use Test::More;
@@ -12,6 +12,7 @@ my %tests = (
 	resultcode	=> 'Successful tet with good plan and a bad return code',
 	badplan		=> 'Has a plan, successful tests, just too small amount of them',
 	funkyindent	=> 'Indentation of comments',
+	uniquename	=> 'Multiple tests with identical names',
 );
 
 plan tests => int (keys %tests);

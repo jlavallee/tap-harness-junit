@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuites>
+  <testsuite name="Multiple tests with identical names" errors="0" failures="0" tests="3" time="0">
+    <system-out>1..3
+ok 1 - Test
+ok 2 - Test
+ok 3 - Test
+</system-out>
+    <testcase name="Test" classname="Multiple tests with identical names" time="0" />
+    <testcase name="Test (1)" classname="Multiple tests with identical names" time="0" />
+    <testcase name="Test (2)" classname="Multiple tests with identical names" time="0" />
+  </testsuite>
+</testsuites>

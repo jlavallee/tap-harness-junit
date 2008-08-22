@@ -2,6 +2,6 @@
 
 use Test::More tests => 10;
 
-ok ("This is ok");
-ok ("This is ok");
-ok ("This is ok");
+ok (1, "First");
+ok (2, "Second");
+ok (3, "Third");

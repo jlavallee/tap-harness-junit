@@ -95,7 +95,7 @@ sub uniquename {
 
 	foreach my $testcase (@{$xml->{testcase}}) {
 		if ($newname eq $testcase->{name}) {
-			return uniquename ($xml, $name, defined $number ? $number + 1 : 1);
+			return uniquename ($xml, $name, defined $number ? $number + 1 : 2);
 		}
 	}
 

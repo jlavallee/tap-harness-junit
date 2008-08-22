@@ -7,7 +7,7 @@ ok 2 - Test
 ok 3 - Test
 </system-out>
     <testcase name="Test" classname="Multiple tests with identical names" time="0" />
-    <testcase name="Test (1)" classname="Multiple tests with identical names" time="0" />
     <testcase name="Test (2)" classname="Multiple tests with identical names" time="0" />
+    <testcase name="Test (3)" classname="Multiple tests with identical names" time="0" />
   </testsuite>
 </testsuites>

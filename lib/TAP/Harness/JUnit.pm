@@ -17,7 +17,7 @@ TAP::Harness::JUnit - Generate JUnit compatible output from TAP results
 =head1 DESCRIPTION
 
 The only difference between this module and I<TAP::Harness> is that
-this adds mandatory 'xmlfile' argument, that causes the output to
+this adds optional 'xmlfile' argument, that causes the output to
 be formatted into XML in format similar to one that is produced by
 JUnit testing framework.
 
@@ -46,7 +46,8 @@ These options are added (compared to I<TAP::Harness>):
 
 =item xmlfile
 
-Name of the file XML output will be saved to.
+Name of the file XML output will be saved to.  In case this argument
+is ommited, default of "junit_output.xml" is used and a warning is issued.
 
 =back
 
@@ -57,9 +58,11 @@ sub new {
 	$args ||= {};
 
 	# Process arguments
-	my $xmlfile = $args->{xmlfile} or
-		$class->_croak("'xmlfile' argument is mandatory");
-
+	my $xmlfile;
+	unless ($xmlfile = $args->{xmlfile}) {
+		$xmlfile = 'junit_output.xml';
+		warn 'xmlfile argument not supplied, defaulting to "junit_output.xml"';
+	}
 	defined $args->{merge} or
 		warn 'You should consider using "merge" parameter. See BUGS section of TAP::Harness::JUnit manual';
 

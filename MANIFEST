@@ -5,6 +5,7 @@ META.yml			Metadata
 README				How to build and install
 t/use.t				Simple test
 t/outputs.t			Test that runs sample tests and compares outputs
+t/xmlfile_default.t		Test that xmlfile argument is really optional
 t/tests/badplan.xml
 t/tests/resultcode.xml
 t/tests/funkyindent.xml

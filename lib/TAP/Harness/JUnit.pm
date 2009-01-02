@@ -335,12 +335,18 @@ Test durations are always set to 0 seconds.
 The comments that are above the C<ok> or C<not ok> are considered the output
 of the test. This, though being more logical, is against TAP specification.
 
-L<XML::Simple> is used to generate the output. It is suboptimal and involves
+I<XML::Simple> is used to generate the output. It is suboptimal and involves
 some hacks.
+
+During testing, the resulting files are not tested against the schema, which
+would be a good thing to do.
 
 =head1 AUTHOR
 
 Lubomir Rintel (Good Data) C<< <lubo.rintel@gooddata.com> >>
+
+Source code for I<TAP::Harness::JUnit> is kept in a public GIT repository.
+Visit L<http://repo.or.cz/w/TAP-Harness-JUnit.git> to get it.
 
 =head1 COPYRIGHT & LICENSE
 

@@ -36,7 +36,7 @@ use XML::Simple;
 use Scalar::Util qw/blessed/;
 use Encode;
 
-our $VERSION = '0.24';
+our $VERSION = '0.25';
 
 =head2 new
 

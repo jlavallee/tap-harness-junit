@@ -34,6 +34,7 @@ use File::Temp;
 use TAP::Parser;
 use XML::Simple;
 use Scalar::Util qw/blessed/;
+use Encode;
 
 our $VERSION = '0.24';
 
@@ -116,6 +117,8 @@ sub parsetest {
 	my $file = shift;
 	my $name = shift;
 
+	my $badretval;
+
 	my $xml = {
 		name => $name,
 		failures => 0,
@@ -140,18 +143,7 @@ sub parsetest {
 		# Comments
 		if ($result->type eq 'comment') {
 			# See BUGS
-			if ($result->comment =~ /Looks like your test died/) {
-				push @{$xml->{testcase}}, {
-					'time' => 0,
-					name => uniquename ($xml, 'Test returned failure'),
-					classname => $name,
-					failure => {
-						type => 'Died',
-						message => $result->comment,
-						content => $result->raw,
-					},
-				};
-			}
+			$badretval = $result if $result->comment =~ /Looks like your test died/;
 
 			#$comment .= $result->comment."\n";
 			# ->comment has leading whitespace stripped
@@ -232,6 +224,22 @@ sub parsetest {
 		$xml->{failures} = abs ($xml->{failures});
 	}
 
+	# Bad return value. See BUGS
+	elsif ($badretval) {
+		# Fake a failed test
+		push @{$xml->{testcase}}, {
+			'time' => 0,
+			name => uniquename ($xml, 'Test returned failure'),
+			classname => $name,
+			failure => {
+				type => 'Died',
+				message => $badretval->comment,
+				content => $badretval->raw,
+			},
+		};
+		$xml->{errors}++;
+	}
+
 	# Add this suite to XML
 	push @{$self->{__xml}->{testsuite}}, $xml;
 }
@@ -266,6 +274,10 @@ sub runtests {
 	my $xs = new XML::Simple;
 	my $xml = $xs->XMLout ($self->{__xml}, RootName => 'testsuites');
 
+	# Ensure it is valid XML. Not very smart though.
+	$xml = encode ('UTF-8', decode ('UTF-8', $xml));
+
+	# Dump output
 	open (XMLFILE, '>'.$self->{__xmlfile})
 		or die $self->{__xmlfile}.': '.$!;
 	print XMLFILE "<?xml version='1.0' encoding='utf-8'?>\n";

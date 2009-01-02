@@ -7,15 +7,18 @@ use Test::More;
 use XML::Simple;
 use File::Temp;
 use File::Basename;
+use Encode;
 
 my %tests = (
-	resultcode	=> 'Successful tet with good plan and a bad return code',
+	resultcode	=> 'Successful test with good plan and a bad return code',
 	badplan		=> 'Has a plan, successful tests, just too small amount of them',
 	funkyindent	=> 'Indentation of comments',
 	uniquename	=> 'Multiple tests with identical names',
+	nonutf8log	=> 'Special characters in log',
+	earlyterm	=> 'Bad plan and non-zero return value',
 );
 
-plan tests => int (keys %tests);
+plan tests => 2 * int (keys %tests);
 
 foreach my $test (keys %tests) {
 	my $model = dirname($0)."/tests/$test.xml";
@@ -30,8 +33,9 @@ foreach my $test (keys %tests) {
 	$harness->runtests ([dirname($0)."/tests/$test.pl" => $tests{$test}]);
 
 	unless ($record) {
-		is_deeply (XMLin ($outfile), XMLin ($model));
-		#print STDERR "$outfile $model\n";
+		is_deeply (XMLin ($outfile), XMLin ($model), "Output of $test matches model");
+		eval { decode ('UTF-8', `cat $outfile`, Encode::FB_CROAK) };
+		ok (!$@, "Output of $test is valid UTF-8");
 		unlink $outfile;
 	}
 }

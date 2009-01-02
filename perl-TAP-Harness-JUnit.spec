@@ -1,6 +1,6 @@
 Name:           perl-TAP-Harness-JUnit
-Version:        0.24
-Release:        1%{?dist}
+Version:        0.25
+Release:        0.1%{?dist}
 Summary:        Generate JUnit compatible output from TAP results
 License:        GPL+ or Artistic
 Group:          Development/Libraries
@@ -12,13 +12,14 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 BuildRequires:  perl(Module::Build)
 Requires:       perl(TAP::Harness) >= 3.05
-BuildRequires:  perl(File::Temp)  
-BuildRequires:  perl(Scalar::Util)  
+BuildRequires:  perl(File::Temp)
+BuildRequires:  perl(Scalar::Util)
 BuildRequires:  perl(TAP::Harness) >= 3.05
-BuildRequires:  perl(TAP::Parser)  
-BuildRequires:  perl(XML::Simple)  
-BuildRequires:  perl(TAP::Harness)  
-BuildRequires:  perl(Test::More)  
+BuildRequires:  perl(TAP::Parser)
+BuildRequires:  perl(XML::Simple)
+BuildRequires:  perl(TAP::Harness)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(Encode)
 Requires:       perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 
 %description
@@ -61,6 +62,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Nov 3 2008 Lubomir Rintel (Good Data) <lubo.rintel@gooddata.com> 0.25-0.1
+- Ensure valid UTF-8 output
+- Do not report failed plain and bad return value as two failures
+
 * Fri Oct 31 2008 Lubomir Rintel (Good Data) <lubo.rintel@gooddata.com> 0.24-1
 - New upstream release
 

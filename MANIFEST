@@ -10,10 +10,10 @@ t/tests/resultcode.xml
 t/tests/funkyindent.xml
 t/tests/uniquename.xml
 t/tests/nonutf8log.xml
-t/tests/resultcode.xml
+t/tests/earlyterm.xml
 t/tests/badplan.pl
 t/tests/funkyindent.pl
 t/tests/resultcode.pl
 t/tests/uniquename.pl
 t/tests/nonutf8log.pl
-t/tests/resultcode.pl
+t/tests/earlyterm.pl

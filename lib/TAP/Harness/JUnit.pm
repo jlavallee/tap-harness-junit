@@ -36,7 +36,7 @@ use XML::Simple;
 use Scalar::Util qw/blessed/;
 use Encode;
 
-our $VERSION = '0.25';
+our $VERSION = '0.26';
 
 =head2 new
 
@@ -306,6 +306,19 @@ JUnit XML schema was obtained from L<http://jra1mw.cvs.cern.ch:8180/cgi-bin/jra1
 
 This module was partly inspired by Michael Peters' I<TAP::Harness::Archive>.
 
+Following people (in no specific order) have reported problems
+or contributed fixes to I<TAP::Harness::JUnit>:
+
+=over
+
+=item David Ritter
+
+=item Jeff Lavallee
+
+=item Andreas Pohl
+
+=back
+
 =head1 BUGS
 
 Test return value is ignored. This is actually not a bug, I<TAP::Parser> doesn't present
@@ -331,7 +344,7 @@ Lubomir Rintel (Good Data) C<< <lubo.rintel@gooddata.com> >>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2008 Good Data, all rights reserved.
+Copyright 2008, 2009 Good Data, All rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

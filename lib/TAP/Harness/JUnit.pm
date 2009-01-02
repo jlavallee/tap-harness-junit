@@ -132,7 +132,12 @@ sub parsetest {
 		'system-out' => [''],
 	};
 
-	my $parser = new TAP::Parser ({'exec' => ['/bin/cat', $self->{__rawtapdir}.'/'.$file]});
+	open (my $tap_handle, $self->{__rawtapdir}.'/'.$file)
+		or die $!;
+	my $rawtap = join ('', <$tap_handle>);
+	close ($tap_handle);
+
+	my $parser = new TAP::Parser ({'tap' => $rawtap });
 
 	my $tests_run = 0;
 	my $comment = ''; # Comment agreggator

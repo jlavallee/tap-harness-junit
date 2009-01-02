@@ -10,8 +10,8 @@ ok 3 - Third
     <testcase name="First" classname="Has a plan, successful tests, just too small amount of them" time="0" />
     <testcase name="Second" classname="Has a plan, successful tests, just too small amount of them" time="0" />
     <testcase name="Third" classname="Has a plan, successful tests, just too small amount of them" time="0" />
-    <testcase name="Test died too soon, some test did not execute." classname="Has a plan, successful tests, just too small amount of them" time="0">
-      <failure message="Some test were not executed. The test died prematurely." type="Plan">Bad plan</failure>
+    <testcase name="Number of runned tests does not match plan." classname="Has a plan, successful tests, just too small amount of them" time="0">
+      <failure message="Some test were not executed, The test died prematurely." type="Plan">Bad plan</failure>
     </testcase>
   </testsuite>
 </testsuites>

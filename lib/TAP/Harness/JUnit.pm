@@ -80,28 +80,37 @@ sub new {
 	return $self;
 }
 
+# Add "(number)" at the end of the test name if the test with
+# the same name already exists in XML
 sub uniquename {
 	my $xml = shift;
 	my $name = shift;
-	my $number = shift; # not mandatory
 
-	my $newname = $name;
+	my $newname;
+	my $number = 1;
 
 	# Beautify a bit -- strip leading "- "
 	# (that is added by Test::More)
-	$newname =~ s/^[\s-]*//;
+	$name =~ s/^[\s-]*//;
 
-	$newname .= " ($number)" if defined $number;
-
-	foreach my $testcase (@{$xml->{testcase}}) {
-		if ($newname eq $testcase->{name}) {
-			return uniquename ($xml, $name, defined $number ? $number + 1 : 2);
+	NAME: while (1) {
+		if ($name) {
+			$newname = $name;
+			$newname .= " ($number)" if $number > 1;
+		} else {
+			$newname = "Unnamed test case $number";
 		}
-	}
 
-	return $newname;
+		$number++;
+		foreach my $testcase (@{$xml->{testcase}}) {
+			next NAME if $newname eq $testcase->{name};
+		}
+
+		return $newname;
+	}
 }
 
+# Add a single TAP output file to the XML
 sub parsetest {
 	my $self = shift;
 	my $file = shift;
@@ -187,6 +196,9 @@ sub parsetest {
 
 	# Detect no plan
 	unless (defined $xml->{tests}) {
+		# Ensure XML will have non-empty value
+		$xml->{tests} = 0;
+
 		# Fake a failed test
 		push @{$xml->{testcase}}, {
 			'time' => 0,
@@ -202,19 +214,22 @@ sub parsetest {
 	}
 
 	# Detect bad plan
-	if ($xml->{failures} = $xml->{tests} - $tests_run) {
+	elsif ($xml->{failures} = $xml->{tests} - $tests_run) {
 		# Fake a failed test
 		push @{$xml->{testcase}}, {
 			'time' => 0,
-			name => uniquename ($xml, 'Test died too soon, some test did not execute.'),
+			name => uniquename ($xml, 'Number of runned tests does not match plan.'),
 			classname => $name,
 			failure => {
 				type => 'Plan',
-				message => 'Some test were not executed. The test died prematurely.',
+				message => ($xml->{failures} > 0
+					? 'Some test were not executed, The test died prematurely.'
+					: 'Extra tests tun.'),
 				content => 'Bad plan',
 			},
 		};
 		$xml->{errors}++;
+		$xml->{failures} = abs ($xml->{failures});
 	}
 
 	# Add this suite to XML

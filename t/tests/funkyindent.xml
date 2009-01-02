@@ -6,14 +6,10 @@
 #         abcd
 # &lt;&lt;&lt; &gt;&gt;      abcd
 not ok 1 - This is not ok
-
-#   Failed test 'This is not ok'
-#   in t/tests/funkyindent.pl at line 9.
 # &lt;&lt;&lt; &gt;&gt;      abcd
 # &lt;&lt;&lt; &gt;&gt;      abcd
 #         abcd
 1..1
-# Looks like you failed 1 test of 1.
 </system-out>
     <testcase name="This is not ok" classname="Indentation of comments" time="0">
       <failure message="not ok 1 - This is not ok" type="TAP::Parser::Result::Test">abcd

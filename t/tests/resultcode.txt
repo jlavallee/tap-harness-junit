@@ -1,0 +1,4 @@
+ok 1 - Success
+Died at t/tests/resultcode.pl line 6.
+1..1
+# Looks like your test died just after 1.

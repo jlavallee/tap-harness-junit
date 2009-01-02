@@ -1,0 +1,4 @@
+1..2
+ok 1 - First
+Yielding non-zero return value at t/tests/earlyterm.pl line 6.
+# Looks like your test died just after 1.

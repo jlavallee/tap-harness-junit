@@ -28,9 +28,10 @@ foreach my $test (keys %tests) {
 		xmlfile		=> $outfile,
 		verbosity	=> -1,
 		merge		=> 1,
+		exec		=> ['cat'],
 	});
 
-	$harness->runtests ([dirname($0)."/tests/$test.pl" => $tests{$test}]);
+	$harness->runtests ([dirname($0)."/tests/$test.txt" => $tests{$test}]);
 
 	unless ($record) {
 		is_deeply (XMLin ($outfile), XMLin ($model), "Output of $test matches model");

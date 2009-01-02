@@ -11,9 +11,9 @@ t/tests/funkyindent.xml
 t/tests/uniquename.xml
 t/tests/nonutf8log.xml
 t/tests/earlyterm.xml
-t/tests/badplan.pl
-t/tests/funkyindent.pl
-t/tests/resultcode.pl
-t/tests/uniquename.pl
-t/tests/nonutf8log.pl
-t/tests/earlyterm.pl
+t/tests/badplan.txt
+t/tests/funkyindent.txt
+t/tests/resultcode.txt
+t/tests/uniquename.txt
+t/tests/nonutf8log.txt
+t/tests/earlyterm.txt

@@ -1,0 +1,7 @@
+1..6
+ok 1 - Test
+ok 2 - Test
+ok 3 - Test
+ok
+ok
+ok

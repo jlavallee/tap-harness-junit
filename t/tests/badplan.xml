@@ -5,7 +5,6 @@
 ok 1 - First
 ok 2 - Second
 ok 3 - Third
-# Looks like you planned 10 tests but only ran 3.
 </system-out>
     <testcase name="First" classname="Has a plan, successful tests, just too small amount of them" time="0" />
     <testcase name="Second" classname="Has a plan, successful tests, just too small amount of them" time="0" />

@@ -50,6 +50,10 @@ These options are added (compared to I<TAP::Harness>):
 Name of the file XML output will be saved to.  In case this argument
 is ommited, default of "junit_output.xml" is used and a warning is issued.
 
+=item notimes
+
+If provided (and true), test case times will not be recorded.
+
 =back
 
 =cut
@@ -72,15 +76,19 @@ sub new {
 	$rawtapdir = $args->{rawtapdir} unless $rawtapdir;
 	$rawtapdir = File::Temp::tempdir() unless $rawtapdir;
 
+	my $notimes = $args->{notimes};
+
 	# Don't pass these to TAP::Harness
 	delete $args->{rawtapdir};
 	delete $args->{xmlfile};
+	delete $args->{notimes};
 
 	my $self = $class->SUPER::new($args);
 	$self->{__xmlfile} = $xmlfile;
 	$self->{__xml} = {testsuite => []};
 	$self->{__rawtapdir} = $rawtapdir;
 	$self->{__cleantap} = not defined $ENV{PERL_TEST_HARNESS_DUMP_TAP};
+	$self->{__notimes} = $notimes;
 
 	return $self;
 }
@@ -277,7 +285,7 @@ sub runtests {
 		# Filed here: https://hudson.dev.java.net/issues/show_bug.cgi?id=2167
 		$comment =~ s/[^a-zA-Z0-9, ]/_/g;
 
-		$self->parsetest ($file, $comment, $aggregator->elapsed->[0]);
+		$self->parsetest ($file, $comment, $self->{__notimes} ? 0 : $aggregator->elapsed->[0]);
 	}
 
 	# Format XML output
@@ -328,11 +336,11 @@ the fact and TAP specification does not require that anyway.
 
 Note that this may be a problem when running I<Test::More> tests with C<no_plan>,
 since it will add a plan matching the number of tests actually run even in case
-the test dies. No not do that -- always write a plan! In case it's not possible,
+the test dies. Do not do that -- always write a plan! In case it's not possible,
 pass C<merge> argument when creating a I<TAP::Harness::JUnit> instance, and the
 harness will detect such failures by matching certain comments.
 
-Test durations are always set to 0 seconds.
+Test durations are always set to 0 seconds, but testcase durations are recorded unless the "notimes" parameter is provided (and true).
 
 The comments that are above the C<ok> or C<not ok> are considered the output
 of the test. This, though being more logical, is against TAP specification.

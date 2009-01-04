@@ -29,6 +29,7 @@ foreach my $test (keys %tests) {
 		verbosity	=> -1,
 		merge		=> 1,
 		exec		=> ['cat'],
+		notimes		=> 1,
 	});
 
 	$harness->runtests ([dirname($0)."/tests/$test.txt" => $tests{$test}]);

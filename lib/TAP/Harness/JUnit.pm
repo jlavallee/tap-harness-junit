@@ -30,6 +30,7 @@ This modules inherits all functions from I<TAP::Harness>.
 package TAP::Harness::JUnit;
 use base 'TAP::Harness';
 
+use Benchmark ':hireswallclock';
 use File::Temp;
 use TAP::Parser;
 use XML::Simple;
@@ -119,6 +120,7 @@ sub parsetest {
 	my $self = shift;
 	my $file = shift;
 	my $name = shift;
+	my $time = shift;
 
 	my $badretval;
 
@@ -127,7 +129,7 @@ sub parsetest {
 		failures => 0,
 		errors => 0,
 		tests => undef,
-		'time' => 0,
+		'time' => $time,
 		testcase => [],
 		'system-out' => [''],
 	};
@@ -275,7 +277,7 @@ sub runtests {
 		# Filed here: https://hudson.dev.java.net/issues/show_bug.cgi?id=2167
 		$comment =~ s/[^a-zA-Z0-9, ]/_/g;
 
-		$self->parsetest ($file, $comment);
+		$self->parsetest ($file, $comment, $aggregator->elapsed->[0]);
 	}
 
 	# Format XML output

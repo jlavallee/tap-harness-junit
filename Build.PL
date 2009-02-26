@@ -17,6 +17,9 @@ my $build = Module::Build->new(
 		'Test::More'	=> 0,
 		'Encode'	=> 0,
 	},
+    build_requires => {
+        'Test::Deep'    => 0,
+    }
 );
 
 $build->create_build_script;

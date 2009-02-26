@@ -296,11 +296,11 @@ sub runtests {
 	$xml = encode ('UTF-8', decode ('UTF-8', $xml));
 
 	# Dump output
-	open (XMLFILE, '>'.$self->{__xmlfile})
+	open my $xml_fh, '>', $self->{__xmlfile}
 		or die $self->{__xmlfile}.': '.$!;
-	print XMLFILE "<?xml version='1.0' encoding='utf-8'?>\n";
-	print XMLFILE $xml;
-	close (XMLFILE);
+	print $xml_fh "<?xml version='1.0' encoding='utf-8'?>\n";
+	print $xml_fh $xml;
+	close $xml_fh;
 
 	# If we caused the dumps to be preserved, clean them
 	File::Path::rmtree($self->{__rawtapdir}) if $self->{__cleantap};

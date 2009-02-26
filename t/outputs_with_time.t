@@ -21,7 +21,7 @@ plan tests => int (keys %tests);
 
 foreach my $test (keys %tests) {
 	my $model = dirname($0)."/tests/$test.xml";
-	my $outfile = File::Temp->new (UNLINK => 0)->filename;
+	my $outfile = File::Temp->new (UNLINK => 1)->filename;
 
 	$harness = new TAP::Harness::JUnit ({
 		xmlfile		=> $outfile,
@@ -36,6 +36,4 @@ foreach my $test (keys %tests) {
     $expected->{testsuite}{'time'} = re('^\d+\.\d+');
 
     cmp_deeply(XMLin ($outfile), $expected, "Output of $test matches model");
-
-    unlink $outfile;
 }

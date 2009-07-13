@@ -50,7 +50,7 @@ These options are added (compared to I<TAP::Harness>):
 Name of the file XML output will be saved to.  In case this argument
 is ommited, default of "junit_output.xml" is used and a warning is issued.
 
-=item notimes (DEPRECATED)
+=item notimes
 
 If provided (and true), test case times will not be recorded.
 
@@ -156,10 +156,7 @@ sub parsetest {
 	my $self = shift;
 	my $file = shift;
 	my $name = shift;
-	my $parser = shift;
-
-	my $time = $parser->{end_time} - $parser->{start_time};
-	$time = 0 if $self->{__notimes};
+	my $time = shift;
 
 	my $badretval;
 
@@ -335,7 +332,7 @@ sub runtests {
 			}
 		}
 
-		$self->parsetest ($file, $comment, $aggregator->{parser_for}->{$file});
+		$self->parsetest ($file, $comment, $self->{__notimes} ? 0 : $aggregator->elapsed->[0]);
 	}
 
 	# Format XML output

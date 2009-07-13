@@ -64,7 +64,7 @@ sub new {
 
 	# Process arguments
 	my $xmlfile;
-	unless ($xmlfile = $args->{xmlfile}) {
+	unless ($xmlfile = delete $args->{xmlfile}) {
 		$xmlfile = 'junit_output.xml';
 		warn 'xmlfile argument not supplied, defaulting to "junit_output.xml"';
 	}
@@ -75,13 +75,9 @@ sub new {
 	my $rawtapdir = $ENV{PERL_TEST_HARNESS_DUMP_TAP};
 	$rawtapdir = $args->{rawtapdir} unless $rawtapdir;
 	$rawtapdir = File::Temp::tempdir() unless $rawtapdir;
-
-	my $notimes = $args->{notimes};
-
-	# Don't pass these to TAP::Harness
 	delete $args->{rawtapdir};
-	delete $args->{xmlfile};
-	delete $args->{notimes};
+
+	my $notimes = delete $args->{notimes};
 
 	my $self = $class->SUPER::new($args);
 	$self->{__xmlfile} = $xmlfile;
@@ -89,6 +85,11 @@ sub new {
 	$self->{__rawtapdir} = $rawtapdir;
 	$self->{__cleantap} = not defined $ENV{PERL_TEST_HARNESS_DUMP_TAP};
 	$self->{__notimes} = $notimes;
+	if (defined $args->{namemangle}) {
+		$self->{__namemangle} = $args->{namemangle};
+	} else {
+		$self->{__namemangle} = 'hudson';
+	}
 
 	return $self;
 }
@@ -258,6 +259,13 @@ sub parsetest {
 		$xml->{errors}++;
 	}
 
+	# Make up times for sub-tests
+	if ($time) {
+		foreach my $testcase (@{$xml->{testcase}}) {
+			$testcase->{time} = $time / @{$xml->{testcase}};
+		}
+	}
+
 	# Add this suite to XML
 	push @{$self->{__xml}->{testsuite}}, $xml;
 }
@@ -340,7 +348,10 @@ the test dies. Do not do that -- always write a plan! In case it's not possible,
 pass C<merge> argument when creating a I<TAP::Harness::JUnit> instance, and the
 harness will detect such failures by matching certain comments.
 
-Test durations are always set to 0 seconds, but testcase durations are recorded unless the "notimes" parameter is provided (and true).
+Test durations are not mesaured. Unless the "notimes" parameter is provided (and
+true), the test duration is recorded as testcase duration divided by number of
+tests, otherwise it's set to 0 seconds. This could be addressed if the module
+was reimplmented as a formatter.
 
 The comments that are above the C<ok> or C<not ok> are considered the output
 of the test. This, though being more logical, is against TAP specification.

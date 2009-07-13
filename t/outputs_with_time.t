@@ -32,8 +32,17 @@ foreach my $test (keys %tests) {
 
 	$harness->runtests ([dirname($0)."/tests/$test.txt" => $tests{$test}]);
 
-    my $expected = XMLin ($model);
-    $expected->{testsuite}{'time'} = re('^\d+\.\d+');
+	my $expected = XMLin ($model);
+	my $testcase = $expected->{testsuite}{testcase};
 
-    cmp_deeply(XMLin ($outfile), $expected, "Output of $test matches model");
+	# Each time key must be replaced with a regex match
+	foreach my $test (
+		$expected->{testsuite}, $testcase,
+		map { $testcase->{$_} } keys %$testcase
+	) {
+		next unless defined $test->{'time'};
+		$test->{'time'} = re ('^\d+\.\d+');
+	}
+
+	cmp_deeply(XMLin ($outfile), $expected, "Output of $test matches model");
 }

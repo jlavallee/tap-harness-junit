@@ -50,7 +50,7 @@ These options are added (compared to I<TAP::Harness>):
 Name of the file XML output will be saved to.  In case this argument
 is ommited, default of "junit_output.xml" is used and a warning is issued.
 
-=item notimes
+=item notimes (DEPRECATED)
 
 If provided (and true), test case times will not be recorded.
 
@@ -156,9 +156,30 @@ sub parsetest {
 	my $self = shift;
 	my $file = shift;
 	my $name = shift;
-	my $time = shift;
+	my $parser = shift;
+
+	my $time = $parser->{end_time} - $parser->{start_time};
+	$time = 0 if $self->{__notimes};
 
 	my $badretval;
+
+	if ($self->{__namemangle}) {
+		# Older version of hudson crafted an URL of the test
+		# results using the name verbatim. Unfortunatelly,
+		# they didn't escape special characters, soo '/'-s
+		# and family would result in incorrect URLs.
+		# See hudson bug #2167
+		$self->{__namemangle} eq 'hudson'
+			and $name =~ s/[^a-zA-Z0-9, ]/_/g;
+
+		# Transform hierarchy of directories into what would
+		# look like hierarchy of classes in Hudson
+		if ($self->{__namemangle} eq 'perl') {
+			$name =~ s/^[\.\/]*//;
+			$name =~ s/\./_/g;
+			$name =~ s/\//./g;
+		}
+	}
 
 	my $xml = {
 		name => $name,
@@ -175,7 +196,8 @@ sub parsetest {
 	my $rawtap = join ('', <$tap_handle>);
 	close ($tap_handle);
 
-	my $parser = new TAP::Parser ({'tap' => $rawtap });
+	# Reset the parser, so we can reparse the output, iterating through it
+	$parser = new TAP::Parser ({'tap' => $rawtap });
 
 	my $tests_run = 0;
 	my $comment = ''; # Comment agreggator
@@ -307,6 +329,7 @@ sub runtests {
 		my $file;
 		my $comment;
 
+		# Comment for the file is the file name unless overriden
 		if (ref $test eq 'ARRAY') {
 			($file, $comment) = @{$test};
 		} else {
@@ -314,25 +337,7 @@ sub runtests {
 		}
 		$comment = $file unless defined $comment;
 
-		if ($self->{__namemangle}) {
-			# Older version of hudson crafted an URL of the test
-			# results using the comment verbatim. Unfortunatelly,
-			# they didn't escape special characters, soo '/'-s
-			# and family would result in incorrect URLs.
-			# See hudson bug #2167
-			$self->{__namemangle} eq 'hudson'
-				and $comment =~ s/[^a-zA-Z0-9, ]/_/g;
-
-			# Transform hierarchy of directories into what would
-			# look like hierarchy of classes in Hudson
-			if ($self->{__namemangle} eq 'perl') {
-				$comment =~ s/^[\.\/]*//;
-				$comment =~ s/\./_/g;
-				$comment =~ s/\//./g;
-			}
-		}
-
-		$self->parsetest ($file, $comment, $self->{__notimes} ? 0 : $aggregator->elapsed->[0]);
+		$self->parsetest ($file, $comment, $aggregator->{parser_for}->{$comment});
 	}
 
 	# Format XML output

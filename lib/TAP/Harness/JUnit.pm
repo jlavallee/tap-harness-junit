@@ -54,6 +54,30 @@ is ommited, default of "junit_output.xml" is used and a warning is issued.
 
 If provided (and true), test case times will not be recorded.
 
+=item namemangle
+
+Specify how to mangle testcase names. This is sometimes required to
+interact with buggy JUnit consumers that lack sufficient validation.
+Available values are:
+
+=over
+
+=item hudson
+
+Replace anything but alphanumeric characters with underscores.
+This is default for historic reasons.
+
+=item perl
+
+Replace slashes in directory hierarchy with dots so that the
+filesystem layout resemble Java class hierarchy.
+
+=item none
+
+Do not do any transformations.
+
+=back
+
 =back
 
 =cut
@@ -287,11 +311,23 @@ sub runtests {
 		}
 		$comment = $file unless defined $comment;
 
-		# Hudson crafts an URL of the test results using the comment verbatim.
-		# Unfortunatelly, they don't escape special characters.
-		# '/'-s and family will result in incorrect URLs.
-		# Filed here: https://hudson.dev.java.net/issues/show_bug.cgi?id=2167
-		$comment =~ s/[^a-zA-Z0-9, ]/_/g;
+		if ($self->{__namemangle}) {
+			# Older version of hudson crafted an URL of the test
+			# results using the comment verbatim. Unfortunatelly,
+			# they didn't escape special characters, soo '/'-s
+			# and family would result in incorrect URLs.
+			# See hudson bug #2167
+			$self->{__namemangle} eq 'hudson'
+				and $comment =~ s/[^a-zA-Z0-9, ]/_/g;
+
+			# Transform hierarchy of directories into what would
+			# look like hierarchy of classes in Hudson
+			if ($self->{__namemangle} eq 'perl') {
+				$comment =~ s/^[\.\/]*//;
+				$comment =~ s/\./_/g;
+				$comment =~ s/\//./g;
+			}
+		}
 
 		$self->parsetest ($file, $comment, $self->{__notimes} ? 0 : $aggregator->elapsed->[0]);
 	}

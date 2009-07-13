@@ -7,7 +7,7 @@ my $build = Module::Build->new(
 	module_name	=> 'TAP::Harness::JUnit',
 	license		=> 'perl',
 	dist_author	=> 'Lubomir Rintel (Good Data) <lubo.rintel@gooddata.com>',
-	dist_version	=> '0.30',
+	dist_version_from => 'lib/TAP/Harness/JUnit.pm',
 	requires	=> {
 		'TAP::Harness'	=> 3.05,
 		'File::Temp'	=> 0,
@@ -17,9 +17,9 @@ my $build = Module::Build->new(
 		'Test::More'	=> 0,
 		'Encode'	=> 0,
 	},
-    build_requires => {
-        'Test::Deep'    => 0,
-    }
+	build_requires => {
+		'Test::Deep'	=> 0,
+	}
 );
 
 $build->create_build_script;

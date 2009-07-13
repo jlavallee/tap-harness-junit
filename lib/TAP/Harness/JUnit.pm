@@ -67,10 +67,13 @@ Available values are:
 Replace anything but alphanumeric characters with underscores.
 This is default for historic reasons.
 
-=item perl
+=item perl (RECOMMENDED)
 
 Replace slashes in directory hierarchy with dots so that the
 filesystem layout resemble Java class hierarchy.
+
+This is the recommended setting and may become a default in
+future.
 
 =item none
 

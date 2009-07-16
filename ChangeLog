@@ -1,0 +1,49 @@
+Revision history for TAP::Harness::Junit
+Format inspired by WWW::Mechanize's revision log
+
+See GIT history for more detailed listing:
+http://repo.or.cz/w/TAP-Harness-JUnit.git
+
+0.32	Mon Jul 13 17:31:25 2009 +0200
+======================================
+[FIXES]
+Tests were timed not time separately, but aggregated duration
+of the whole test run was used.
+
+[DOCUMENTATION]
+Recommend using the perl name mangling
+
+0.31	Mon Jul 13 08:59:27 2009 +0200
+======================================
+[ENHANCEMENTS]
+Make test name mangling configurable
+More recent Hudson versions cope with this well, we don't want to
+arbitrarily change the test names now, to retain compatibility.
+
+Make up timing information for tests
+Hudson ignores the testcase duration, computes it as sum of
+test times.
+
+0.30	Thu Apr 16 17:46:03 2009 +0200
+======================================
+[ENHANCEMENTS]
+Use TAP::Harness::Aggregator->elapsed to set the elapsed time for testcases
+
+Added "notimes" paramter that prevents timing of test cases
+made use of that parameter in t/outputs.t
+
+Remove SPEC file from here -- master copy is Fedora devel
+
+0.26	Sat Jan 3 00:53:44 2009 +0100
+======================================
+[FIXES]
+Do not call /bin/cat to get TAP output into parser (rt#41344)
+
+Make 'xmlfile' optional (rt#42069)
+
+Ensure valid UTF-8 output
+Do not report failed plain and bad return value as two failures
+
+[ENHANCEMENTS]
+Iteratively choose name for tests with ambigious names to prevent deep recursion warnings for long tests
+Improve the output for tests with broken plan a bit

@@ -3,6 +3,7 @@ lib/TAP/Harness/JUnit.pm	TAP::Harness::JUnit package
 MANIFEST			This list of files
 META.yml			Metadata
 README				How to build and install
+ChangeLog			Log of Changes, duh
 t/use.t				Simple test
 t/outputs.t			Test that runs sample tests and compares outputs
 t/xmlfile_default.t		Test that xmlfile argument is really optional

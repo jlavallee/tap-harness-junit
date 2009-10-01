@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuites>
+  <testsuite name="Zero_length output" errors="1" failures="0" tests="0" time="0">
+    <system-out></system-out>
+    <testcase name="Test died too soon, even before plan." classname="Zero_length output" time="0">
+      <failure message="The test suite died before a plan was produced. You need to have a plan." type="Plan">No plan</failure>
+    </testcase>
+  </testsuite>
+</testsuites>

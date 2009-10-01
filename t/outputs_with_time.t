@@ -15,6 +15,7 @@ my %tests = (
 	uniquename	=> 'Multiple tests with identical names',
 	nonutf8log	=> 'Special characters in log',
 	earlyterm	=> 'Bad plan and non-zero return value',
+	empty		=> 'Zero-length output',
 );
 
 plan tests => int (keys %tests);

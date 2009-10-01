@@ -4,6 +4,13 @@ Format inspired by WWW::Mechanize's revision log
 See GIT history for more detailed listing:
 http://repo.or.cz/w/TAP-Harness-JUnit.git
 
+0.33	TBD
+======================================
+[FIXES]
+If an output of test was of length zero, TAP::Parser would not
+recognize it as TAP output and would panic. We help it by adding
+a single line break.
+
 0.32	Mon Jul 13 17:31:25 2009 +0200
 ======================================
 [FIXES]

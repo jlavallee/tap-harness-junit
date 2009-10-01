@@ -195,6 +195,8 @@ sub parsetest {
 		or die $!;
 	my $rawtap = join ('', <$tap_handle>);
 	close ($tap_handle);
+	# TAP::Parser refuses to construct a TAP stream from an empty string
+	$rawtap = "\n" unless $rawtap;
 
 	# Reset the parser, so we can reparse the output, iterating through it
 	$parser = new TAP::Parser ({'tap' => $rawtap });

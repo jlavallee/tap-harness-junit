@@ -19,3 +19,5 @@ t/tests/resultcode.txt
 t/tests/uniquename.txt
 t/tests/nonutf8log.txt
 t/tests/earlyterm.txt
+t/tests/empty.txt
+t/tests/empty.xml

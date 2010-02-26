@@ -158,7 +158,7 @@ sub parsetest {
 	my $name = shift;
 	my $parser = shift;
 
-	my $time = $parser->{end_time} - $parser->{start_time};
+	my $time = $parser->end_time - $parser->start_time;
 	$time = 0 if $self->{__notimes};
 
 	my $badretval;

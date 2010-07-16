@@ -1,0 +1,7 @@
+.*.sw*
+Build
+MYMETA.yml
+_build/
+blib/
+nytprof*
+nytprof/

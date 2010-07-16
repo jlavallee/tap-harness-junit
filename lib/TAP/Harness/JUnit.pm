@@ -112,6 +112,7 @@ sub new {
 	$self->{__rawtapdir} = $rawtapdir;
 	$self->{__cleantap} = not defined $ENV{PERL_TEST_HARNESS_DUMP_TAP};
 	$self->{__notimes} = $notimes;
+    $self->{__auto_number} = 1;
 	if (defined $args->{namemangle}) {
 		$self->{__namemangle} = $args->{namemangle};
 	} else {
@@ -134,20 +135,20 @@ sub uniquename {
 	# (that is added by Test::More)
 	$name =~ s/^[\s-]*//;
 
-	$self->{_test_names} = { map { $_->{name} => 1 } @{ $xml->{testcase} } }
-		unless $self->{_test_names};
+	$self->{__test_names} = { map { $_->{name} => 1 } @{ $xml->{testcase} } }
+		unless $self->{__test_names};
 
-	my $number = 1;
 	while(1) {
+        my $number = $self->{__auto_number};
 		$newname = $name
 				 ? $name.($number > 1 ? " ($number)" : '')
 				 : "Unnamed test case $number"
 		;
-		last unless $self->{_test_names}->{$newname};
-		$number++;
+		last unless exists $self->{__test_names}->{$newname};
+		$self->{__auto_number}++;
 	};
 
-	$self->{_test_names}->{$newname}++;
+	$self->{__test_names}->{$newname}++;
 
 	return $newname;
 }

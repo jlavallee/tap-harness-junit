@@ -124,31 +124,32 @@ sub new {
 # Add "(number)" at the end of the test name if the test with
 # the same name already exists in XML
 sub uniquename {
-	my $xml = shift;
+	my $self = shift;
+	my $xml  = shift;
 	my $name = shift;
 
 	my $newname;
-	my $number = 1;
 
 	# Beautify a bit -- strip leading "- "
 	# (that is added by Test::More)
 	$name =~ s/^[\s-]*//;
 
-	NAME: while (1) {
-		if ($name) {
-			$newname = $name;
-			$newname .= " ($number)" if $number > 1;
-		} else {
-			$newname = "Unnamed test case $number";
-		}
+	$self->{_test_names} = { map { $_->{name} => 1 } @{ $xml->{testcase} } }
+		unless $self->{_test_names};
 
+	my $number = 1;
+	while(1) {
+		$newname = $name
+				 ? $name.($number > 1 ? " ($number)" : '')
+				 : "Unnamed test case $number"
+		;
+		last unless $self->{_test_names}->{$newname};
 		$number++;
-		foreach my $testcase (@{$xml->{testcase}}) {
-			next NAME if $newname eq $testcase->{name};
-		}
+	};
 
-		return $newname;
-	}
+	$self->{_test_names}->{$newname}++;
+
+	return $newname;
 }
 
 # Add a single TAP output file to the XML
@@ -235,7 +236,7 @@ sub parsetest {
 
 			my $test = {
 				'time' => 0,
-				name => uniquename ($xml, $result->description),
+				name => $self->uniquename($xml, $result->description),
 				classname => $name,
 			};
 
@@ -264,7 +265,7 @@ sub parsetest {
 		# Fake a failed test
 		push @{$xml->{testcase}}, {
 			'time' => 0,
-			name => uniquename ($xml, 'Test died too soon, even before plan.'),
+			name => $self->uniquename($xml, 'Test died too soon, even before plan.'),
 			classname => $name,
 			failure => {
 				type => 'Plan',
@@ -280,7 +281,7 @@ sub parsetest {
 		# Fake a failed test
 		push @{$xml->{testcase}}, {
 			'time' => 0,
-			name => uniquename ($xml, 'Number of runned tests does not match plan.'),
+			name => $self->uniquename($xml, 'Number of runned tests does not match plan.'),
 			classname => $name,
 			failure => {
 				type => 'Plan',
@@ -299,7 +300,7 @@ sub parsetest {
 		# Fake a failed test
 		push @{$xml->{testcase}}, {
 			'time' => 0,
-			name => uniquename ($xml, 'Test returned failure'),
+			name => $self->uniquename($xml, 'Test returned failure'),
 			classname => $name,
 			failure => {
 				type => 'Died',

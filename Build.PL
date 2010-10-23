@@ -8,6 +8,12 @@ my $build = Module::Build->new(
 	license		=> 'perl',
 	dist_author	=> 'Lubomir Rintel (Good Data) <lubo.rintel@gooddata.com>',
 	dist_version_from => 'lib/TAP/Harness/JUnit.pm',
+    meta_merge     => {
+        resources => {
+            bugtracker => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=TAP-Harness-JUnit',
+            repository => 'http://repo.or.cz/w/TAP-Harness-JUnit.git',
+        }
+    },
 	requires	=> {
 		'TAP::Harness'	=> 3.05,
 		'File::Temp'	=> 0,

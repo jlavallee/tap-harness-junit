@@ -150,7 +150,7 @@ sub uniquename {
 
 	$self->{__test_names}->{$newname}++;
 
-	return $newname;
+	return xmlsafe($newname);
 }
 
 # Add a single TAP output file to the XML
@@ -219,12 +219,12 @@ sub parsetest {
 
 			#$comment .= $result->comment."\n";
 			# ->comment has leading whitespace stripped
-			$result->raw =~ /^# (.*)/ and $comment .= $1."\n";
+			$result->raw =~ /^# (.*)/ and $comment .= xmlsafe($1)."\n";
 		}
 
 		# Errors
 		if ($result->type eq 'unknown') {
-			$comment .= $result->raw."\n";
+			$comment .= xmlsafe($result->raw)."\n";
 		}
 
 		# Test case
@@ -244,7 +244,7 @@ sub parsetest {
 			if ($result->ok eq 'not ok') {
 				$test->{failure} = [{
 					type => blessed ($result),
-					message => $result->raw,
+					message => xmlsafe($result->raw),
 					content => $comment,
 				}];
 				$xml->{errors}++;
@@ -255,7 +255,7 @@ sub parsetest {
 		}
 
 		# Log
-		$xml->{'system-out'}->[0] .= $result->raw."\n";
+		$xml->{'system-out'}->[0] .= xmlsafe($result->raw)."\n";
 	}
 
 	# Detect no plan
@@ -306,7 +306,7 @@ sub parsetest {
 			failure => {
 				type => 'Died',
 				message => $badretval->comment,
-				content => $badretval->raw,
+				content => xmlsafe($badretval->raw),
 			},
 		};
 		$xml->{errors}++;
@@ -363,6 +363,21 @@ sub runtests {
 
 	return $aggregator;
 }
+
+# Because not all utf8 characters are allowed in xml, only these
+#    Char       ::=      #x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] | [#x10000-#x10FFFF]
+# http://www.w3.org/TR/REC-xml/#NT-Char
+sub xmlsafe {
+    my $s = shift;
+
+    return '' unless defined $s && length($s) > 0;
+
+    $s =~ s/([\x01|\x02|\x03|\x04|\x05|\x06|\x07|\x08|\x0B|\x0C|\x0E|\x0F|\x11|\x12|\x13|\x14|\x15|\x16|\x17|\x18|\x19|\x1A|\x1B|\x1C|\x1D|\x1E|\x1F])/ sprintf("<%0.2x>", ord($1)) /gex;
+
+
+    return $s;
+}
+
 
 =head1 SEE ALSO
 

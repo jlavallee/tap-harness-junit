@@ -106,18 +106,16 @@ sub new {
 
 	my $notimes = delete $args->{notimes};
 
+  	my $namemangle = delete $args->{namemangle} || 'hudson';
+  
 	my $self = $class->SUPER::new($args);
 	$self->{__xmlfile} = $xmlfile;
 	$self->{__xml} = {testsuite => []};
 	$self->{__rawtapdir} = $rawtapdir;
 	$self->{__cleantap} = not defined $ENV{PERL_TEST_HARNESS_DUMP_TAP};
 	$self->{__notimes} = $notimes;
+  	$self->{__namemangle} = $namemangle;
     $self->{__auto_number} = 1;
-	if (defined $args->{namemangle}) {
-		$self->{__namemangle} = $args->{namemangle};
-	} else {
-		$self->{__namemangle} = 'hudson';
-	}
 
 	return $self;
 }

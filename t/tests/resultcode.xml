@@ -1,14 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <testsuites>
-  <testsuite name="Successful test with good plan and a bad return code" errors="1" failures="0" tests="1" time="0">
+  <testsuite name="Successful test with good plan and a bad return code" errors="0" failures="0" tests="1" time="0">
     <system-out>ok 1 - Success
 Died at t/tests/resultcode.pl line 6.
 1..1
 # Looks like your test died just after 1.
 </system-out>
     <testcase name="Success" classname="Successful test with good plan and a bad return code" time="0" />
-    <testcase name="Test returned failure" classname="Successful test with good plan and a bad return code" time="0">
-      <failure message="Looks like your test died just after 1." type="Died"># Looks like your test died just after 1.</failure>
-    </testcase>
   </testsuite>
 </testsuites>

@@ -163,7 +163,8 @@ sub parsetest {
 	my $time = $parser->end_time - $parser->start_time;
 	$time = 0 if $self->{__notimes};
 
-	my $badretval;
+    # Get the return code of test script before re-parsing the TAP output
+	my $badretval = $parser->exit;
 
 	if ($self->{__namemangle}) {
 		# Older version of hudson crafted an URL of the test
@@ -214,8 +215,8 @@ sub parsetest {
 
 		# Comments
 		if ($result->type eq 'comment') {
-			# See BUGS
-			$badretval = $result if $result->comment =~ /Looks like your test died/;
+			# See BUGS - I think this whole bit can be removed - Ton Voon
+			#$badretval = $result if $result->comment =~ /Looks like your test died/;
 
 			#$comment .= $result->comment."\n";
 			# ->comment has leading whitespace stripped
@@ -297,7 +298,8 @@ sub parsetest {
 	}
 
 	# Bad return value. See BUGS
-	elsif ($badretval and not $xml->{errors}) {
+	#elsif ($badretval and not $xml->{errors}) {
+	elsif ($badretval) {
 		# Fake a failed test
 		push @{$xml->{testcase}}, {
 			'time' => 0,
@@ -305,11 +307,12 @@ sub parsetest {
 			classname => $name,
 			failure => {
 				type => 'Died',
-				message => $badretval->comment,
-				content => xmlsafe($badretval->raw),
+  				message => "Test died with return code $badretval",
+  				content => "Test died with return code $badretval",
 			},
 		};
 		$xml->{errors}++;
+  		$xml->{tests}++;
 	}
 
 	# Make up times for sub-tests

@@ -12,8 +12,8 @@ ok
     <testcase name="Test" classname="Multiple tests with identical names" time="0" />
     <testcase name="Test (2)" classname="Multiple tests with identical names" time="0" />
     <testcase name="Test (3)" classname="Multiple tests with identical names" time="0" />
-    <testcase name="Unnamed test case 1" classname="Multiple tests with identical names" time="0" />
-    <testcase name="Unnamed test case 2" classname="Multiple tests with identical names" time="0" />
     <testcase name="Unnamed test case 3" classname="Multiple tests with identical names" time="0" />
+    <testcase name="Unnamed test case 4" classname="Multiple tests with identical names" time="0" />
+    <testcase name="Unnamed test case 5" classname="Multiple tests with identical names" time="0" />
   </testsuite>
 </testsuites>

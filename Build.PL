@@ -6,14 +6,14 @@ use Module::Build;
 my $build = Module::Build->new(
 	module_name	=> 'TAP::Harness::JUnit',
 	license		=> 'perl',
-	dist_author	=> 'Lubomir Rintel (Good Data) <lubo.rintel@gooddata.com>',
+	dist_author	=> 'Lubomir Rintel (GoodData) <lubo.rintel@gooddata.com>',
 	dist_version_from => 'lib/TAP/Harness/JUnit.pm',
-    meta_merge     => {
-        resources => {
-            bugtracker => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=TAP-Harness-JUnit',
-            repository => 'http://repo.or.cz/w/TAP-Harness-JUnit.git',
-        }
-    },
+	meta_merge     => {
+		resources => {
+			bugtracker => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=TAP-Harness-JUnit',
+			repository => 'https://github.com/jlavallee/tap-harness-junit',
+		}
+	},
 	requires	=> {
 		'TAP::Harness'	=> 3.05,
 		'File::Temp'	=> 0,

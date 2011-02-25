@@ -371,9 +371,12 @@ JUnit XML schema was obtained from L<http://jra1mw.cvs.cern.ch:8180/cgi-bin/jra1
 =head1 ACKNOWLEDGEMENTS
 
 This module was partly inspired by Michael Peters' I<TAP::Harness::Archive>.
+It was originally written by Lubomir Rintel (GoodData)
+C<< <lubo.rintel@gooddata.com> >> and includes code from several
+contributors.
 
 Following people (in no specific order) have reported problems
-or contributed fixes to I<TAP::Harness::JUnit>:
+or contributed code to I<TAP::Harness::JUnit>:
 
 =over
 
@@ -410,16 +413,18 @@ some hacks.
 During testing, the resulting files are not tested against the schema, which
 would be a good thing to do.
 
-=head1 AUTHOR
-
-Lubomir Rintel (Good Data) C<< <lubo.rintel@gooddata.com> >>
+=head1 CONTRIBUTING
 
 Source code for I<TAP::Harness::JUnit> is kept in a public GIT repository.
-Visit L<http://repo.or.cz/w/TAP-Harness-JUnit.git> to get it.
+Visit L<https://github.com/jlavallee/tap-harness-junit>.
+
+Bugs reports and feature enhancement requests are tracked at
+L<https://rt.cpan.org/Public/Dist/Display.html?Name=TAP-Harness-JUnit>.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2008, 2009 Good Data, All rights reserved.
+Copyright 2008, 2009, 2010, 2011 I<TAP::Harness::JUnit> contributors.
+All rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

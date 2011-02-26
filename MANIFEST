@@ -1,23 +1,27 @@
 Build.PL			Build script generator
+ChangeLog			Log of Changes, duh
 lib/TAP/Harness/JUnit.pm	TAP::Harness::JUnit package
 MANIFEST			This list of files
 META.yml			Metadata
 README				How to build and install
-ChangeLog			Log of Changes, duh
-t/use.t				Simple test
+t/large_suite.t
 t/outputs.t			Test that runs sample tests and compares outputs
-t/xmlfile_default.t		Test that xmlfile argument is really optional
-t/tests/badplan.xml
-t/tests/resultcode.xml
-t/tests/funkyindent.xml
-t/tests/uniquename.xml
-t/tests/nonutf8log.xml
-t/tests/earlyterm.xml
+t/outputs_with_time.t
 t/tests/badplan.txt
-t/tests/funkyindent.txt
-t/tests/resultcode.txt
-t/tests/uniquename.txt
-t/tests/nonutf8log.txt
+t/tests/badplan.xml
 t/tests/earlyterm.txt
+t/tests/earlyterm.xml
 t/tests/empty.txt
 t/tests/empty.xml
+t/tests/funkyindent.txt
+t/tests/funkyindent.xml
+t/tests/large_suite.txt
+t/tests/large_suite.xml
+t/tests/nonutf8log.txt
+t/tests/nonutf8log.xml
+t/tests/resultcode.txt
+t/tests/resultcode.xml
+t/tests/uniquename.txt
+t/tests/uniquename.xml
+t/use.t				Simple test
+t/xmlfile_default.t		Test that xmlfile argument is really optional

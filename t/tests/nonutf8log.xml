@@ -1,10 +1,16 @@
 <?xml version='1.0' encoding='utf-8'?>
 <testsuites>
-  <testsuite name="Special characters in log" errors="0" failures="0" tests="1" time="0">
-    <system-out>1..1
+  <testsuite name="Special characters in log" errors="0" failures="0" tests="3" time="0">
+    <system-out>1..3
 ok 1 - First
 # �
+ok 2 - bad char ==&lt;0c&gt;==
+ok 3 - japanese s/b ok 記事だにゃ
+# bad char ==&lt;0c&gt;==
+# japanese s/b ok 記事だにゃ
 </system-out>
     <testcase name="First" classname="Special characters in log" time="0" />
+    <testcase name="bad char ==&lt;0c&gt;==" classname="Special characters in log" time="0" />
+    <testcase name="japanese s/b ok 記事だにゃ" classname="Special characters in log" time="0" />
   </testsuite>
 </testsuites>

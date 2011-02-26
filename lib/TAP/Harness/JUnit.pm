@@ -106,18 +106,16 @@ sub new {
 
 	my $notimes = delete $args->{notimes};
 
+  	my $namemangle = delete $args->{namemangle} || 'hudson';
+  
 	my $self = $class->SUPER::new($args);
 	$self->{__xmlfile} = $xmlfile;
 	$self->{__xml} = {testsuite => []};
 	$self->{__rawtapdir} = $rawtapdir;
 	$self->{__cleantap} = not defined $ENV{PERL_TEST_HARNESS_DUMP_TAP};
 	$self->{__notimes} = $notimes;
+  	$self->{__namemangle} = $namemangle;
     $self->{__auto_number} = 1;
-	if (defined $args->{namemangle}) {
-		$self->{__namemangle} = $args->{namemangle};
-	} else {
-		$self->{__namemangle} = 'hudson';
-	}
 
 	return $self;
 }
@@ -150,7 +148,7 @@ sub uniquename {
 
 	$self->{__test_names}->{$newname}++;
 
-	return $newname;
+	return xmlsafe($newname);
 }
 
 # Add a single TAP output file to the XML
@@ -163,7 +161,8 @@ sub parsetest {
 	my $time = $parser->end_time - $parser->start_time;
 	$time = 0 if $self->{__notimes};
 
-	my $badretval;
+    # Get the return code of test script before re-parsing the TAP output
+	my $badretval = $parser->exit;
 
 	if ($self->{__namemangle}) {
 		# Older version of hudson crafted an URL of the test
@@ -214,17 +213,17 @@ sub parsetest {
 
 		# Comments
 		if ($result->type eq 'comment') {
-			# See BUGS
-			$badretval = $result if $result->comment =~ /Looks like your test died/;
+			# See BUGS - I think this whole bit can be removed - Ton Voon
+			#$badretval = $result if $result->comment =~ /Looks like your test died/;
 
 			#$comment .= $result->comment."\n";
 			# ->comment has leading whitespace stripped
-			$result->raw =~ /^# (.*)/ and $comment .= $1."\n";
+			$result->raw =~ /^# (.*)/ and $comment .= xmlsafe($1)."\n";
 		}
 
 		# Errors
 		if ($result->type eq 'unknown') {
-			$comment .= $result->raw."\n";
+			$comment .= xmlsafe($result->raw)."\n";
 		}
 
 		# Test case
@@ -244,7 +243,7 @@ sub parsetest {
 			if ($result->ok eq 'not ok') {
 				$test->{failure} = [{
 					type => blessed ($result),
-					message => $result->raw,
+					message => xmlsafe($result->raw),
 					content => $comment,
 				}];
 				$xml->{errors}++;
@@ -255,7 +254,7 @@ sub parsetest {
 		}
 
 		# Log
-		$xml->{'system-out'}->[0] .= $result->raw."\n";
+		$xml->{'system-out'}->[0] .= xmlsafe($result->raw)."\n";
 	}
 
 	# Detect no plan
@@ -297,7 +296,8 @@ sub parsetest {
 	}
 
 	# Bad return value. See BUGS
-	elsif ($badretval and not $xml->{errors}) {
+	#elsif ($badretval and not $xml->{errors}) {
+	elsif ($badretval) {
 		# Fake a failed test
 		push @{$xml->{testcase}}, {
 			'time' => 0,
@@ -305,11 +305,12 @@ sub parsetest {
 			classname => $name,
 			failure => {
 				type => 'Died',
-				message => $badretval->comment,
-				content => $badretval->raw,
+  				message => "Test died with return code $badretval",
+  				content => "Test died with return code $badretval",
 			},
 		};
 		$xml->{errors}++;
+  		$xml->{tests}++;
 	}
 
 	# Make up times for sub-tests
@@ -363,6 +364,21 @@ sub runtests {
 
 	return $aggregator;
 }
+
+# Because not all utf8 characters are allowed in xml, only these
+#    Char       ::=      #x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] | [#x10000-#x10FFFF]
+# http://www.w3.org/TR/REC-xml/#NT-Char
+sub xmlsafe {
+    my $s = shift;
+
+    return '' unless defined $s && length($s) > 0;
+
+    $s =~ s/([\x01|\x02|\x03|\x04|\x05|\x06|\x07|\x08|\x0B|\x0C|\x0E|\x0F|\x11|\x12|\x13|\x14|\x15|\x16|\x17|\x18|\x19|\x1A|\x1B|\x1C|\x1D|\x1E|\x1F])/ sprintf("<%0.2x>", ord($1)) /gex;
+
+
+    return $s;
+}
+
 
 =head1 SEE ALSO
 

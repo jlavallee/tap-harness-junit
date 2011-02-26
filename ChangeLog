@@ -2,14 +2,20 @@ Revision history for TAP::Harness::Junit
 Format inspired by WWW::Mechanize's revision log
 
 See GIT history for more detailed listing:
-http://repo.or.cz/w/TAP-Harness-JUnit.git
+https://github.com/jlavallee/tap-harness-junit.git
 
-0.33	TBD
+0.33	Sat Feb 26 11:15:45 2011 -0800
 ======================================
 [FIXES]
 If an output of test was of length zero, TAP::Parser would not
 recognize it as TAP output and would panic. We help it by adding
 a single line break.
+RT49307 - system-out content is not escaped
+RT56521 - Catching no_plan errors
+RT53657 - Error using namemangle option with ::newA
+RT53730 - test output takes forever on lots of unnamed tests
+[DOCUMENTATION]
+git repository location changed
 
 0.32	Mon Jul 13 17:31:25 2009 +0200
 ======================================

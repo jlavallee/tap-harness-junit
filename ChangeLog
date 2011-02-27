@@ -4,6 +4,14 @@ Format inspired by WWW::Mechanize's revision log
 See GIT history for more detailed listing:
 https://github.com/jlavallee/tap-harness-junit.git
 
+0.34    Sun Feb 27 15:48:05 2011 -0800
+======================================
+[ENHANCEMENTS]
+The name of the JUnit output file can now be set using the
+environment variable $JUNIT_OUTPUT_FILE - see RT60063
+[FIXES]
+The tests no longer rely on "cat", and should pass on Windows
+
 0.33	Sat Feb 26 11:15:45 2011 -0800
 ======================================
 [FIXES]

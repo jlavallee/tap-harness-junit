@@ -220,11 +220,6 @@ sub parsetest {
 
 		# Comments
 		if ($result->type eq 'comment') {
-			# See BUGS - I think this whole bit can be removed - Ton Voon
-			#$badretval = $result if $result->comment =~ /Looks like your test died/;
-
-			#$comment .= $result->comment."\n";
-			# ->comment has leading whitespace stripped
 			$result->raw =~ /^# (.*)/ and $comment .= xmlsafe($1)."\n";
 		}
 

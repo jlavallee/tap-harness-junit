@@ -20,6 +20,8 @@ my %tests = (
 
 plan tests => int (keys %tests);
 
+my $our_cat  = [$^X, qw/-ne print/];
+
 foreach my $test (keys %tests) {
 	my $model = dirname($0)."/tests/$test.xml";
 	my $outfile = File::Temp->new (UNLINK => 1)->filename;
@@ -28,7 +30,7 @@ foreach my $test (keys %tests) {
 		xmlfile		=> $outfile,
 		verbosity	=> -1,
 		merge		=> 1,
-		exec		=> ['cat'],
+		exec		=> $our_cat,
 	});
 
 	$harness->runtests ([dirname($0)."/tests/$test.txt" => $tests{$test}]);

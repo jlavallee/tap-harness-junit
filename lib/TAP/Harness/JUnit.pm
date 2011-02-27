@@ -50,6 +50,9 @@ These options are added (compared to I<TAP::Harness>):
 Name of the file XML output will be saved to.  In case this argument
 is ommited, default of "junit_output.xml" is used and a warning is issued.
 
+Alternatively, the name of the output file can be specified in the 
+$JUNIT_OUTPUT_FILE environment variable
+
 =item notimes (DEPRECATED)
 
 If provided (and true), test case times will not be recorded.
@@ -81,7 +84,10 @@ Do not do any transformations.
 
 =back
 
-=back
+=head1 ENVIRONMENT VARIABLES
+
+The name of the output file can be specified in the $JUNIT_OUTPUT_FILE 
+environment variable
 
 =cut
 
@@ -90,8 +96,9 @@ sub new {
 	$args ||= {};
 
 	# Process arguments
-	my $xmlfile;
-	unless ($xmlfile = delete $args->{xmlfile}) {
+	my $xmlfile = delete $args->{xmlfile};
+	$xmlfile = $ENV{JUNIT_OUTPUT_FILE} unless defined $xmlfile;
+	unless($xmlfile) {
 		$xmlfile = 'junit_output.xml';
 		warn 'xmlfile argument not supplied, defaulting to "junit_output.xml"';
 	}

@@ -404,6 +404,11 @@ or contributed code to I<TAP::Harness::JUnit>:
 
 =item Andreas Pohl
 
+=item Ton Voon
+
+=item Kevin Goess
+
+
 =back
 
 =head1 BUGS

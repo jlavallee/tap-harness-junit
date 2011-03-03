@@ -298,8 +298,7 @@ sub parsetest {
 	}
 
 	# Bad return value. See BUGS
-	#elsif ($badretval and not $xml->{errors}) {
-	elsif ($badretval) {
+	elsif ($badretval and not $xml->{errors}) {
 		# Fake a failed test
 		push @{$xml->{testcase}}, {
 			'time' => 0,

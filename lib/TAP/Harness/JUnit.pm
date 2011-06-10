@@ -102,8 +102,6 @@ sub new {
 		$xmlfile = 'junit_output.xml';
 		warn 'xmlfile argument not supplied, defaulting to "junit_output.xml"';
 	}
-	defined $args->{merge} or
-		warn 'You should consider using "merge" parameter. See BUGS section of TAP::Harness::JUnit manual';
 
 	# Get the name of raw perl dump directory
 	my $rawtapdir = $ENV{PERL_TEST_HARNESS_DUMP_TAP};
@@ -123,6 +121,11 @@ sub new {
 	$self->{__notimes} = $notimes;
   	$self->{__namemangle} = $namemangle;
     $self->{__auto_number} = 1;
+
+	# Inject our parser, that persists results for later
+	# consumption and adds timing information
+	@TAP::Harness::JUnit::Parser::ISA = ($self->parser_class);
+	$self->parser_class ('TAP::Harness::JUnit::Parser');
 
 	return $self;
 }
@@ -158,10 +161,9 @@ sub uniquename {
 	return xmlsafe($newname);
 }
 
-# Add a single TAP output file to the XML
+# Add result of a single TAP parse to the XML
 sub parsetest {
 	my $self = shift;
-	my $file = shift;
 	my $name = shift;
 	my $parser = shift;
 
@@ -199,19 +201,12 @@ sub parsetest {
 		'system-out' => [''],
 	};
 
-	open (my $tap_handle, $self->{__rawtapdir}.'/'.$file)
-		or die $!;
-	my $rawtap = join ('', <$tap_handle>);
-	close ($tap_handle);
-	# TAP::Parser refuses to construct a TAP stream from an empty string
-	$rawtap = "\n" unless $rawtap;
-
-	# Reset the parser, so we can reparse the output, iterating through it
-	$parser = new TAP::Parser ({'tap' => $rawtap });
-
 	my $tests_run = 0;
 	my $comment = ''; # Comment agreggator
-	while ( my $result = $parser->next ) {
+	foreach my $result (@{$parser->{__results}}) {
+
+		my $time = $result->{__end_time} - $result->{__start_time};
+		$time = 0 if $self->{__notimes};
 
 		# Counters
 		if ($result->type eq 'plan') {
@@ -237,7 +232,7 @@ sub parsetest {
 			$result->directive eq 'SKIP' and next;
 
 			my $test = {
-				'time' => 0,
+				'time' => $time,
 				name => $self->uniquename($xml, $result->description),
 				classname => $name,
 			};
@@ -266,7 +261,7 @@ sub parsetest {
 
 		# Fake a failed test
 		push @{$xml->{testcase}}, {
-			'time' => 0,
+			'time' => $time,
 			name => $self->uniquename($xml, 'Test died too soon, even before plan.'),
 			classname => $name,
 			failure => {
@@ -282,7 +277,7 @@ sub parsetest {
 	elsif ($xml->{failures} = $xml->{tests} - $tests_run) {
 		# Fake a failed test
 		push @{$xml->{testcase}}, {
-			'time' => 0,
+			'time' => $time,
 			name => $self->uniquename($xml, 'Number of runned tests does not match plan.'),
 			classname => $name,
 			failure => {
@@ -301,7 +296,7 @@ sub parsetest {
 	elsif ($badretval and not $xml->{errors}) {
 		# Fake a failed test
 		push @{$xml->{testcase}}, {
-			'time' => 0,
+			'time' => $time,
 			name => $self->uniquename($xml, 'Test returned failure'),
 			classname => $name,
 			failure => {
@@ -314,13 +309,6 @@ sub parsetest {
   		$xml->{tests}++;
 	}
 
-	# Make up times for sub-tests
-	if ($time) {
-		foreach my $testcase (@{$xml->{testcase}}) {
-			$testcase->{time} = $time / @{$xml->{testcase}};
-		}
-	}
-
 	# Add this suite to XML
 	push @{$self->{__xml}->{testsuite}}, $xml;
 }
@@ -328,22 +316,10 @@ sub parsetest {
 sub runtests {
 	my ($self, @files) = @_;
 
-	$ENV{PERL_TEST_HARNESS_DUMP_TAP} = $self->{__rawtapdir};
 	my $aggregator = $self->SUPER::runtests(@files);
 
-	foreach my $test (@files) {
-		my $file;
-		my $comment;
-
-		# Comment for the file is the file name unless overriden
-		if (ref $test eq 'ARRAY') {
-			($file, $comment) = @{$test};
-		} else {
-			$file = $test;
-		}
-		$comment = $file unless defined $comment;
-
-		$self->parsetest ($file, $comment, $aggregator->{parser_for}->{$comment});
+	foreach my $test (keys %{$aggregator->{parser_for}}) {
+		$self->parsetest ($test => $aggregator->{parser_for}->{$test});
 	}
 
 	# Format XML output
@@ -380,6 +356,35 @@ sub xmlsafe {
     return $s;
 }
 
+# This is meant to transparently extend the parser chosen by user.
+# Dynamically superubclassed to the chosen parser upon harnsess construction.
+package TAP::Harness::JUnit::Parser;
+
+use Time::HiRes qw/time/;
+
+# Upon each line taken, account for time and remember the exact
+# result. A harness should then collect the results from the aggregator.
+sub next
+{
+	my $self = shift;
+	my $result = $self->SUPER::next (@_);
+	return $result unless $result; # last call
+
+	# First assert
+	unless ($self->{__results}) {
+		$self->{__last_assert} = $self->start_time;
+		$self->{__results} = []
+	}
+
+	# Account for time taken
+	$result->{__start_time} = $self->{__last_assert};
+	$result->{__end_time} = $self->{__last_assert} = time;
+
+	# Remember for the aggregator
+	push @{$self->{__results}}, $result;
+
+	return $result;
+}
 
 =head1 SEE ALSO
 
@@ -411,20 +416,6 @@ or contributed code to I<TAP::Harness::JUnit>:
 =back
 
 =head1 BUGS
-
-Test return value is ignored. This is actually not a bug, I<TAP::Parser> doesn't present
-the fact and TAP specification does not require that anyway.
-
-Note that this may be a problem when running I<Test::More> tests with C<no_plan>,
-since it will add a plan matching the number of tests actually run even in case
-the test dies. Do not do that -- always write a plan! In case it's not possible,
-pass C<merge> argument when creating a I<TAP::Harness::JUnit> instance, and the
-harness will detect such failures by matching certain comments.
-
-Test durations are not mesaured. Unless the "notimes" parameter is provided (and
-true), the test duration is recorded as testcase duration divided by number of
-tests, otherwise it's set to 0 seconds. This could be addressed if the module
-was reimplmented as a formatter.
 
 The comments that are above the C<ok> or C<not ok> are considered the output
 of the test. This, though being more logical, is against TAP specification.

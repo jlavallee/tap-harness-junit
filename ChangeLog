@@ -4,7 +4,7 @@ Format inspired by WWW::Mechanize's revision log
 See GIT history for more detailed listing:
 https://github.com/jlavallee/tap-harness-junit.git
 
-0.36	TBD
+0.36	Tue Jun 14 14:49:18 2011 +0200
 ======================================
 [ENHANCEMENTS]
 Per-assert timing info is now much more accurate.

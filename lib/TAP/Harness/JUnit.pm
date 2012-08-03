@@ -119,6 +119,9 @@ sub new {
 		warn 'xmlfile argument not supplied, defaulting to "junit_output.xml"';
 	}
 
+	my $xmlpackage = delete $args->{package};
+	$xmlpackage = $ENV{JUNIT_PACKAGE} unless defined $xmlpackage;
+
 	# Get the name of raw perl dump directory
 	my $rawtapdir = $ENV{PERL_TEST_HARNESS_DUMP_TAP};
 	$rawtapdir = $args->{rawtapdir} unless $rawtapdir;
@@ -132,6 +135,7 @@ sub new {
 	my $self = $class->SUPER::new($args);
 	$self->{__xmlfile} = $xmlfile;
 	$self->{__xml} = {testsuite => []};
+	$self->{__xmlpackage} = $xmlpackage;
 	$self->{__rawtapdir} = $rawtapdir;
 	$self->{__cleantap} = not defined $ENV{PERL_TEST_HARNESS_DUMP_TAP};
 	$self->{__notimes} = $notimes;
@@ -207,8 +211,13 @@ sub parsetest {
 		}
 	}
 
+	# Hudson/Jenkins strip the prefix from a classname to figure out the package
+	my $prefixname = $self->{__xmlpackage}
+		? $self->{__xmlpackage}.'.'.$name
+		: $name;
+
 	my $xml = {
-		name => $name,
+		name => $prefixname,
 		failures => 0,
 		errors => 0,
 		tests => undef,
@@ -250,7 +259,7 @@ sub parsetest {
 			my $test = {
 				'time' => $time,
 				name => $self->uniquename($xml, $result->description),
-				classname => $name,
+				classname => $prefixname,
 			};
 
 			if ($result->ok eq 'not ok') {
@@ -279,7 +288,7 @@ sub parsetest {
 		push @{$xml->{testcase}}, {
 			'time' => $time,
 			name => $self->uniquename($xml, 'Test died too soon, even before plan.'),
-			classname => $name,
+			classname => $prefixname,
 			failure => {
 				type => 'Plan',
 				message => 'The test suite died before a plan was produced. You need to have a plan.',
@@ -295,7 +304,7 @@ sub parsetest {
 		push @{$xml->{testcase}}, {
 			'time' => $time,
 			name => $self->uniquename($xml, 'Number of runned tests does not match plan.'),
-			classname => $name,
+			classname => $prefixname,
 			failure => {
 				type => 'Plan',
 				message => ($xml->{failures} > 0
@@ -314,7 +323,7 @@ sub parsetest {
 		push @{$xml->{testcase}}, {
 			'time' => $time,
 			name => $self->uniquename($xml, 'Test returned failure'),
-			classname => $name,
+			classname => $prefixname,
 			failure => {
 				type => 'Died',
   				message => "Test died with return code $badretval",

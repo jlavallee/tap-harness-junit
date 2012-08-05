@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuites>
+  <testsuite name="Package prefix test" errors="0" failures="0" tests="5" time="0">
+    <system-out>ok 1
+ok 2
+ok 3
+ok 4
+ok 5
+1..5
+</system-out>
+    <testcase name="Unnamed test case 1" classname="Package prefix test" time="0" />
+    <testcase name="Unnamed test case 2" classname="Package prefix test" time="0" />
+    <testcase name="Unnamed test case 3" classname="Package prefix test" time="0" />
+    <testcase name="Unnamed test case 4" classname="Package prefix test" time="0" />
+    <testcase name="Unnamed test case 5" classname="Package prefix test" time="0" />
+  </testsuite>
+</testsuites>

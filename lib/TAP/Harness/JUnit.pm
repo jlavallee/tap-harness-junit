@@ -9,7 +9,8 @@ TAP::Harness::JUnit - Generate JUnit compatible output from TAP results
 
     use TAP::Harness::JUnit;
     my $harness = TAP::Harness::JUnit->new({
-    	xmlfile => 'output.xml',
+        xmlfile => 'output.xml',
+        package => 'database',
     	...
     });
     $harness->runtests(@tests);
@@ -17,9 +18,9 @@ TAP::Harness::JUnit - Generate JUnit compatible output from TAP results
 =head1 DESCRIPTION
 
 The only difference between this module and I<TAP::Harness> is that
-this adds optional 'xmlfile' argument, that causes the output to
-be formatted into XML in format similar to one that is produced by
-JUnit testing framework.
+this adds two optional arguments: 'xmlfile' and 'package', that cause 
+the output to be formatted into XML in format similar to one that is 
+produced by the JUnit testing framework.
 
 =head1 METHODS
 
@@ -53,6 +54,16 @@ is ommited, default of "junit_output.xml" is used and a warning is issued.
 Alternatively, the name of the output file can be specified in the 
 $JUNIT_OUTPUT_FILE environment variable
 
+=item package
+
+The Hudson/Jenkins continuous-integration systems support separating test
+results into "packages". By default any number of output xml files will be
+merged into the default package "(root)".
+
+Setting a package-name will place all test results from the current run into
+that package. You can also set the environment variable $JUNIT_PACKAGE to do
+the same.
+
 =item notimes (DEPRECATED)
 
 If provided (and true), test case times will not be recorded.
@@ -84,10 +95,15 @@ Do not do any transformations.
 
 =back
 
+=back
+
 =head1 ENVIRONMENT VARIABLES
 
 The name of the output file can be specified in the $JUNIT_OUTPUT_FILE 
 environment variable
+
+The package name that Hudson/Jenkins use to categorise test results can
+be specified in $JUNIT_PACKAGE.
 
 =cut
 
@@ -103,6 +119,9 @@ sub new {
 		warn 'xmlfile argument not supplied, defaulting to "junit_output.xml"';
 	}
 
+	my $xmlpackage = delete $args->{package};
+	$xmlpackage = $ENV{JUNIT_PACKAGE} unless defined $xmlpackage;
+
 	# Get the name of raw perl dump directory
 	my $rawtapdir = $ENV{PERL_TEST_HARNESS_DUMP_TAP};
 	$rawtapdir = $args->{rawtapdir} unless $rawtapdir;
@@ -116,6 +135,7 @@ sub new {
 	my $self = $class->SUPER::new($args);
 	$self->{__xmlfile} = $xmlfile;
 	$self->{__xml} = {testsuite => []};
+	$self->{__xmlpackage} = $xmlpackage;
 	$self->{__rawtapdir} = $rawtapdir;
 	$self->{__cleantap} = not defined $ENV{PERL_TEST_HARNESS_DUMP_TAP};
 	$self->{__notimes} = $notimes;
@@ -191,8 +211,13 @@ sub parsetest {
 		}
 	}
 
+	# Hudson/Jenkins strip the prefix from a classname to figure out the package
+	my $prefixname = $self->{__xmlpackage}
+		? $self->{__xmlpackage}.'.'.$name
+		: $name;
+
 	my $xml = {
-		name => $name,
+		name => $prefixname,
 		failures => 0,
 		errors => 0,
 		tests => undef,
@@ -234,7 +259,7 @@ sub parsetest {
 			my $test = {
 				'time' => $time,
 				name => $self->uniquename($xml, $result->description),
-				classname => $name,
+				classname => $prefixname,
 			};
 
 			if ($result->ok eq 'not ok') {
@@ -263,7 +288,7 @@ sub parsetest {
 		push @{$xml->{testcase}}, {
 			'time' => $time,
 			name => $self->uniquename($xml, 'Test died too soon, even before plan.'),
-			classname => $name,
+			classname => $prefixname,
 			failure => {
 				type => 'Plan',
 				message => 'The test suite died before a plan was produced. You need to have a plan.',
@@ -279,7 +304,7 @@ sub parsetest {
 		push @{$xml->{testcase}}, {
 			'time' => $time,
 			name => $self->uniquename($xml, 'Number of runned tests does not match plan.'),
-			classname => $name,
+			classname => $prefixname,
 			failure => {
 				type => 'Plan',
 				message => ($xml->{failures} > 0
@@ -298,7 +323,7 @@ sub parsetest {
 		push @{$xml->{testcase}}, {
 			'time' => $time,
 			name => $self->uniquename($xml, 'Test returned failure'),
-			classname => $name,
+			classname => $prefixname,
 			failure => {
 				type => 'Died',
   				message => "Test died with return code $badretval",

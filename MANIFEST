@@ -25,3 +25,7 @@ t/tests/uniquename.txt
 t/tests/uniquename.xml
 t/use.t				Simple test
 t/xmlfile_default.t		Test that xmlfile argument is really optional
+t/package.t         test for $JUNIT_PACKAGE
+t/tests/package.qqq.xml
+t/tests/package.txt
+t/tests/package.xml

@@ -4,6 +4,12 @@ Format inspired by WWW::Mechanize's revision log
 See GIT history for more detailed listing:
 https://github.com/jlavallee/tap-harness-junit.git
 
+0.37	Sun Aug  5 16:05:52 2012 -0800
+======================================
+[ENHANCEMENTS]
+JUNIT_PACKAGE prefix setting added by Richard Huxton
+See RT78642
+
 0.36	Tue Jun 14 14:49:18 2011 +0200
 ======================================
 [ENHANCEMENTS]

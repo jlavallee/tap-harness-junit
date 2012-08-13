@@ -21,7 +21,8 @@ my $build = Module::Build->new(
 		'XML::Simple'	=> 0,
 		'Scalar::Util'	=> 0,
 		'Test::More'	=> 0,
-		'Encode'	=> 0,
+        'Time::HiRes'	=> 0,
+		'Encode'	    => 0,
 	},
 	build_requires => {
 		'Test::Deep'	=> 0,

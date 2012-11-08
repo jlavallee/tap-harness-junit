@@ -4,6 +4,11 @@ Format inspired by WWW::Mechanize's revision log
 See GIT history for more detailed listing:
 https://github.com/jlavallee/tap-harness-junit.git
 
+0.38    Wed Nov  7 22:45:34 2012 -0800
+======================================
+[FIXES]
+Added Time::HiRes prereq added by David E. Wheeler
+
 0.37	Sun Aug  5 16:05:52 2012 -0800
 ======================================
 [ENHANCEMENTS]

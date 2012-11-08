@@ -38,7 +38,7 @@ use XML::Simple;
 use Scalar::Util qw/blessed/;
 use Encode;
 
-our $VERSION = '0.37';
+our $VERSION = '0.38';
 
 =head2 new
 
@@ -436,6 +436,10 @@ or contributed code to I<TAP::Harness::JUnit>:
 =item Ton Voon
 
 =item Kevin Goess
+
+=item Richard Huxton
+
+=item David E. Wheeler
 
 
 =back

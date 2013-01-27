@@ -4,6 +4,11 @@ Format inspired by WWW::Mechanize's revision log
 See GIT history for more detailed listing:
 https://github.com/jlavallee/tap-harness-junit.git
 
+0.40    Sun Jan 27 12:35:00 2013 -0800
+======================================
+[FIXES]
+Fix for RT78933 by Malcolm Parsons
+
 0.39    Sun Jan 27 00:52:07 2013 -0800
 ======================================
 [FIXES]

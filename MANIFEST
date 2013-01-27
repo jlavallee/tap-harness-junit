@@ -3,7 +3,7 @@ ChangeLog			Log of Changes, duh
 lib/TAP/Harness/JUnit.pm	TAP::Harness::JUnit package
 MANIFEST			This list of files
 META.yml			Metadata
-README				How to build and install
+README.md			How to build and install
 t/large_suite.t
 t/outputs.t			Test that runs sample tests and compares outputs
 t/outputs_with_time.t

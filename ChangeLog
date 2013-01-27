@@ -4,6 +4,11 @@ Format inspired by WWW::Mechanize's revision log
 See GIT history for more detailed listing:
 https://github.com/jlavallee/tap-harness-junit.git
 
+0.39    Sun Jan 27 00:52:07 2013 -0800
+======================================
+[FIXES]
+Relax time test regex a bit for Windows
+
 0.38    Wed Nov  7 22:45:34 2012 -0800
 ======================================
 [FIXES]

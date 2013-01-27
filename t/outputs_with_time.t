@@ -44,7 +44,7 @@ foreach my $test (keys %tests) {
 		map { $testcase->{$_} } keys %$testcase
 	) {
 		next unless defined $test->{'time'};
-		$test->{'time'} = re ('^\d+\.\d+');
+		$test->{'time'} = re ('^\d+(:?\.\d+)?');
 	}
 
 	cmp_deeply(XMLin ($outfile), $expected, "Output of $test matches model");

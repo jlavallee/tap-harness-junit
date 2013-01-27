@@ -13,6 +13,13 @@ To generate JUnit output using prove, supply `TAP::Harness::JUnit` for the `--ha
 prove --harness TAP::Harness::JUnit
 ```
 
+## Environment variables
+
+`JUNIT_OUTPUT_FILE` - specify the name of the JUnit XML output file.  Defaults to `junit_output.xml`.
+
+`JUNIT_PACKAGE` - specify a package name for the results.
+
+
 ## Installation
 
 Before building it yourself, you may prefer to fetch the package from your

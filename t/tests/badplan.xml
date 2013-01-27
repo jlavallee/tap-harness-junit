@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <testsuites>
-  <testsuite name="Has a plan, successful tests, just too small amount of them" errors="1" failures="7" tests="10" time="0">
+  <testsuite name="Has a plan, successful tests, just too small amount of them" errors="7" failures="1" tests="10" time="0">
     <system-out>1..10
 ok 1 - First
 ok 2 - Second

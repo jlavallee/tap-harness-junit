@@ -268,7 +268,7 @@ sub parsetest {
 					message => xmlsafe($result->raw),
 					content => $comment,
 				}];
-				$xml->{errors}++;
+				$xml->{failures}++;
 			};
 
 			push @{$xml->{testcase}}, $test;
@@ -299,27 +299,27 @@ sub parsetest {
 	}
 
 	# Detect bad plan
-	elsif ($xml->{failures} = $xml->{tests} - $tests_run) {
-		# Fake a failed test
+	elsif ($xml->{errors} = $xml->{tests} - $tests_run) {
+		# Fake an error
 		push @{$xml->{testcase}}, {
 			'time' => $time,
 			name => $self->uniquename($xml, 'Number of runned tests does not match plan.'),
 			classname => $prefixname,
 			failure => {
 				type => 'Plan',
-				message => ($xml->{failures} > 0
+				message => ($xml->{errors} > 0
 					? 'Some test were not executed, The test died prematurely.'
 					: 'Extra tests tun.'),
 				content => 'Bad plan',
 			},
 		};
-		$xml->{errors}++;
-		$xml->{failures} = abs ($xml->{failures});
+		$xml->{failures}++;
+		$xml->{errors} = abs ($xml->{errors});
 	}
 
 	# Bad return value. See BUGS
-	elsif ($badretval and not $xml->{errors}) {
-		# Fake a failed test
+	elsif ($badretval and not $xml->{failures}) {
+		# Fake an error
 		push @{$xml->{testcase}}, {
 			'time' => $time,
 			name => $self->uniquename($xml, 'Test returned failure'),
@@ -440,6 +440,8 @@ or contributed code to I<TAP::Harness::JUnit>:
 =item Richard Huxton
 
 =item David E. Wheeler
+
+=item Malcolm Parsons
 
 
 =back

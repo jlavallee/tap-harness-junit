@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <testsuites>
-  <testsuite name="Indentation of comments" errors="1" failures="0" tests="1" time="0">
+  <testsuite name="Indentation of comments" errors="0" failures="1" tests="1" time="0">
     <system-out># abcd
 #     abcd
 #         abcd

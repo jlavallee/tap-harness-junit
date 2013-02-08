@@ -21,11 +21,11 @@ foreach my $test (keys %tests) {
 	my $outfile = File::Temp->new (UNLINK => 0)->filename;
 
 	my $harness = new TAP::Harness::JUnit ({
-		xmlfile		=> $outfile,
-		verbosity	=> -1,
-		merge		=> 1,
-		exec		=> $our_cat,
-		notimes		=> 1,
+		xmlfile     => $outfile,
+		verbosity   => -1,
+		merge       => 1,
+		exec        => $our_cat,
+		notimes     => 1,
 	});
 
 	$harness->runtests ([dirname($0)."/tests/$test.txt" => $tests{$test}]);
@@ -34,12 +34,12 @@ foreach my $test (keys %tests) {
 	my $outfile_p0 = File::Temp->new (UNLINK => 0)->filename;
 
 	my $harness_p0 = new TAP::Harness::JUnit ({
-		xmlfile		=> $outfile_p0,
+		xmlfile     => $outfile_p0,
 		package     => '',
-		verbosity	=> -1,
-		merge		=> 1,
-		exec		=> $our_cat,
-		notimes		=> 1,
+		verbosity   => -1,
+		merge       => 1,
+		exec        => $our_cat,
+		notimes     => 1,
 	});
 
 	$harness_p0->runtests ([dirname($0)."/tests/$test.txt" => $tests{$test}]);
@@ -49,12 +49,12 @@ foreach my $test (keys %tests) {
 	my $outfile_p1 = File::Temp->new (UNLINK => 0)->filename;
 
 	my $harness_p1 = new TAP::Harness::JUnit ({
-		xmlfile		=> $outfile_p1,
+		xmlfile     => $outfile_p1,
 		package     => 'QQQ',
-		verbosity	=> -1,
-		merge		=> 1,
-		exec		=> $our_cat,
-		notimes		=> 1,
+		verbosity   => -1,
+		merge       => 1,
+		exec        => $our_cat,
+		notimes     => 1,
 	});
 
 	$harness_p1->runtests ([dirname($0)."/tests/$test.txt" => $tests{$test}]);
@@ -63,11 +63,11 @@ foreach my $test (keys %tests) {
 	my $outfile_p2 = File::Temp->new (UNLINK => 0)->filename;
 	$ENV{JUNIT_PACKAGE} = 'QQQ';
 	my $harness_p2 = new TAP::Harness::JUnit ({
-		xmlfile		=> $outfile_p2,
-		verbosity	=> -1,
-		merge		=> 1,
-		exec		=> $our_cat,
-		notimes		=> 1,
+		xmlfile     => $outfile_p2,
+		verbosity   => -1,
+		merge       => 1,
+		exec        => $our_cat,
+		notimes     => 1,
 	});
 
 	$harness_p2->runtests ([dirname($0)."/tests/$test.txt" => $tests{$test}]);

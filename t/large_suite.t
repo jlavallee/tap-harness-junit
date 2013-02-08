@@ -23,11 +23,11 @@ foreach my $test (keys %tests) {
 	my $outfile = ($record ? $model : File::Temp->new (UNLINK => 0)->filename);
 
 	$harness = new TAP::Harness::JUnit ({
-		xmlfile		=> $outfile,
-		verbosity	=> -1,
-		merge		=> 1,
-		exec		=> $our_cat,
-		notimes		=> 1,
+		xmlfile     => $outfile,
+		verbosity   => -1,
+		merge       => 1,
+		exec        => $our_cat,
+		notimes     => 1,
 	});
 
 	$harness->runtests ([dirname($0)."/tests/$test.txt" => $tests{$test}]);

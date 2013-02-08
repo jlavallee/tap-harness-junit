@@ -11,15 +11,15 @@ TAP::Harness::JUnit - Generate JUnit compatible output from TAP results
     my $harness = TAP::Harness::JUnit->new({
         xmlfile => 'output.xml',
         package => 'database',
-    	...
+        # ...
     });
     $harness->runtests(@tests);
 
 =head1 DESCRIPTION
 
 The only difference between this module and I<TAP::Harness> is that
-this adds two optional arguments: 'xmlfile' and 'package', that cause 
-the output to be formatted into XML in format similar to one that is 
+this adds two optional arguments: 'xmlfile' and 'package', that cause
+the output to be formatted into XML in format similar to one that is
 produced by the JUnit testing framework.
 
 =head1 METHODS
@@ -51,7 +51,7 @@ These options are added (compared to I<TAP::Harness>):
 Name of the file XML output will be saved to.  In case this argument
 is ommited, default of "junit_output.xml" is used and a warning is issued.
 
-Alternatively, the name of the output file can be specified in the 
+Alternatively, the name of the output file can be specified in the
 $JUNIT_OUTPUT_FILE environment variable
 
 =item package
@@ -99,7 +99,7 @@ Do not do any transformations.
 
 =head1 ENVIRONMENT VARIABLES
 
-The name of the output file can be specified in the $JUNIT_OUTPUT_FILE 
+The name of the output file can be specified in the $JUNIT_OUTPUT_FILE
 environment variable
 
 The package name that Hudson/Jenkins use to categorise test results can
@@ -130,8 +130,8 @@ sub new {
 
 	my $notimes = delete $args->{notimes};
 
-  	my $namemangle = delete $args->{namemangle} || 'hudson';
-  
+	my $namemangle = delete $args->{namemangle} || 'hudson';
+
 	my $self = $class->SUPER::new($args);
 	$self->{__xmlfile} = $xmlfile;
 	$self->{__xml} = {testsuite => []};
@@ -139,8 +139,8 @@ sub new {
 	$self->{__rawtapdir} = $rawtapdir;
 	$self->{__cleantap} = not defined $ENV{PERL_TEST_HARNESS_DUMP_TAP};
 	$self->{__notimes} = $notimes;
-  	$self->{__namemangle} = $namemangle;
-    $self->{__auto_number} = 1;
+	$self->{__namemangle} = $namemangle;
+	$self->{__auto_number} = 1;
 
 	# Inject our parser, that persists results for later
 	# consumption and adds timing information
@@ -167,7 +167,7 @@ sub uniquename {
 		unless $self->{__test_names};
 
 	while(1) {
-        my $number = $self->{__auto_number};
+		my $number = $self->{__auto_number};
 		$newname = $name
 				 ? $name.($number > 1 ? " ($number)" : '')
 				 : "Unnamed test case $number"
@@ -190,7 +190,7 @@ sub parsetest {
 	my $time = $parser->end_time - $parser->start_time;
 	$time = 0 if $self->{__notimes};
 
-    # Get the return code of test script before re-parsing the TAP output
+	# Get the return code of test script before re-parsing the TAP output
 	my $badretval = $parser->exit;
 
 	if ($self->{__namemangle}) {
@@ -326,12 +326,12 @@ sub parsetest {
 			classname => $prefixname,
 			failure => {
 				type => 'Died',
-  				message => "Test died with return code $badretval",
-  				content => "Test died with return code $badretval",
+				message => "Test died with return code $badretval",
+				content => "Test died with return code $badretval",
 			},
 		};
 		$xml->{errors}++;
-  		$xml->{tests}++;
+		$xml->{tests}++;
 	}
 
 	# Add this suite to XML
@@ -371,14 +371,14 @@ sub runtests {
 #    Char       ::=      #x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] | [#x10000-#x10FFFF]
 # http://www.w3.org/TR/REC-xml/#NT-Char
 sub xmlsafe {
-    my $s = shift;
+	my $s = shift;
 
-    return '' unless defined $s && length($s) > 0;
+	return '' unless defined $s && length($s) > 0;
 
-    $s =~ s/([\x01|\x02|\x03|\x04|\x05|\x06|\x07|\x08|\x0B|\x0C|\x0E|\x0F|\x11|\x12|\x13|\x14|\x15|\x16|\x17|\x18|\x19|\x1A|\x1B|\x1C|\x1D|\x1E|\x1F])/ sprintf("<%0.2x>", ord($1)) /gex;
+	$s =~ s/([\x01|\x02|\x03|\x04|\x05|\x06|\x07|\x08|\x0B|\x0C|\x0E|\x0F|\x11|\x12|\x13|\x14|\x15|\x16|\x17|\x18|\x19|\x1A|\x1B|\x1C|\x1D|\x1E|\x1F])/ sprintf("<%0.2x>", ord($1)) /gex;
 
 
-    return $s;
+	return $s;
 }
 
 # This is meant to transparently extend the parser chosen by user.

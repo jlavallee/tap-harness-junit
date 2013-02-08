@@ -1,8 +1,14 @@
 Revision history for TAP::Harness::Junit
 Format inspired by WWW::Mechanize's revision log
 
-See GIT history for more detailed listing:
+See Git history for more detailed listing:
 https://github.com/jlavallee/tap-harness-junit.git
+
+0.41    Thu Feb  7 21:16:24 2013 -0800
+======================================
+[ENHANCEMENTS]
+Expose namemangle option as environment variable by Finn Smith
+Documentation & whitespace cleanup by Finn Smith
 
 0.40    Sun Jan 27 12:35:00 2013 -0800
 ======================================

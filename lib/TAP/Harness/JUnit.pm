@@ -17,14 +17,14 @@ TAP::Harness::JUnit - Generate JUnit compatible output from TAP results
 
 =head1 DESCRIPTION
 
-The only difference between this module and I<TAP::Harness> is that
-this adds two optional arguments: 'xmlfile' and 'package', that cause
-the output to be formatted into XML in format similar to one that is
+The only difference between this module and I<TAP::Harness> is that this module
+adds the optional arguments 'xmlfile', 'package', and 'namemangle' that cause
+the output to be formatted into XML in a format similar to the one that is
 produced by the JUnit testing framework.
 
 =head1 METHODS
 
-This modules inherits all functions from I<TAP::Harness>.
+This module inherits all functions from I<TAP::Harness>.
 
 =cut
 
@@ -48,8 +48,8 @@ These options are added (compared to I<TAP::Harness>):
 
 =item xmlfile
 
-Name of the file XML output will be saved to.  In case this argument
-is ommited, default of "junit_output.xml" is used and a warning is issued.
+Name of the file XML output will be saved to. If this argument is omitted, the
+default of "junit_output.xml" is used and a warning is issued.
 
 Alternatively, the name of the output file can be specified in the
 $JUNIT_OUTPUT_FILE environment variable
@@ -60,7 +60,7 @@ The Hudson/Jenkins continuous-integration systems support separating test
 results into "packages". By default any number of output xml files will be
 merged into the default package "(root)".
 
-Setting a package-name will place all test results from the current run into
+Setting a package name will place all test results from the current run into
 that package. You can also set the environment variable $JUNIT_PACKAGE to do
 the same.
 
@@ -70,28 +70,31 @@ If provided (and true), test case times will not be recorded.
 
 =item namemangle
 
-Specify how to mangle testcase names. This is sometimes required to
-interact with buggy JUnit consumers that lack sufficient validation.
+Specify how to mangle testcase names. This is sometimes required to interact
+with buggy JUnit consumers that lack sufficient validation.
+
+Alternatively, this value can be set in the environment variable
+$JUNIT_NAME_MANGLE.
+
 Available values are:
 
 =over
 
 =item hudson
 
-Replace anything but alphanumeric characters with underscores.
-This is default for historic reasons.
+Replace anything but alphanumeric characters with underscores. This is the
+default for historic reasons.
 
 =item perl (RECOMMENDED)
 
-Replace slashes in directory hierarchy with dots so that the
-filesystem layout resemble Java class hierarchy.
+Replace slashes in the directory hierarchy with dots so that the filesystem
+layout resembles a Java class hierarchy.
 
-This is the recommended setting and may become a default in
-future.
+This is the recommended setting and may become the default in future.
 
 =item none
 
-Do not do any transformations.
+Do not perform any transformations.
 
 =back
 
@@ -102,8 +105,11 @@ Do not do any transformations.
 The name of the output file can be specified in the $JUNIT_OUTPUT_FILE
 environment variable
 
-The package name that Hudson/Jenkins use to categorise test results can
-be specified in $JUNIT_PACKAGE.
+The package name that Hudson/Jenkins use to categorise test results can be
+specified in $JUNIT_PACKAGE.
+
+The name mangling mechanism used to rewrite test names can be specified in
+$JUNIT_NAME_MANGLE. (See namemangle documentation for available values.)
 
 =cut
 
@@ -114,7 +120,7 @@ sub new {
 	# Process arguments
 	my $xmlfile = delete $args->{xmlfile};
 	$xmlfile = $ENV{JUNIT_OUTPUT_FILE} unless defined $xmlfile;
-	unless($xmlfile) {
+	unless ($xmlfile) {
 		$xmlfile = 'junit_output.xml';
 		warn 'xmlfile argument not supplied, defaulting to "junit_output.xml"';
 	}
@@ -130,7 +136,11 @@ sub new {
 
 	my $notimes = delete $args->{notimes};
 
-	my $namemangle = delete $args->{namemangle} || 'hudson';
+	my $namemangle = delete $args->{namemangle};
+	$namemangle = $ENV{JUNIT_NAME_MANGLE} unless defined $namemangle;
+	unless ($namemangle) {
+		$namemangle = 'hudson';
+	}
 
 	my $self = $class->SUPER::new($args);
 	$self->{__xmlfile} = $xmlfile;
@@ -413,17 +423,17 @@ sub next
 
 =head1 SEE ALSO
 
-JUnit XML schema was obtained from L<http://jra1mw.cvs.cern.ch:8180/cgi-bin/jra1mw.cgi/org.glite.testing.unit/config/JUnitXSchema.xsd?view=markup>.
+The JUnit XML schema was obtained from
+L<http://jra1mw.cvs.cern.ch:8180/cgi-bin/jra1mw.cgi/org.glite.testing.unit/config/JUnitXSchema.xsd?view=markup>.
 
 =head1 ACKNOWLEDGEMENTS
 
-This module was partly inspired by Michael Peters' I<TAP::Harness::Archive>.
+This module was partly inspired by Michael Peters's I<TAP::Harness::Archive>.
 It was originally written by Lubomir Rintel (GoodData)
-C<< <lubo.rintel@gooddata.com> >> and includes code from several
-contributors.
+C<< <lubo.rintel@gooddata.com> >> and includes code from several contributors.
 
-Following people (in no specific order) have reported problems
-or contributed code to I<TAP::Harness::JUnit>:
+The following people (in no specific order) have reported problems or
+contributed code to I<TAP::Harness::JUnit>:
 
 =over
 
@@ -443,35 +453,36 @@ or contributed code to I<TAP::Harness::JUnit>:
 
 =item Malcolm Parsons
 
+=item Finn Smith
 
 =back
 
 =head1 BUGS
 
-The comments that are above the C<ok> or C<not ok> are considered the output
-of the test. This, though being more logical, is against TAP specification.
+The comments that are above the C<ok> or C<not ok> are considered the output of
+the test. This, though being more logical, is against TAP specification.
 
-I<XML::Simple> is used to generate the output. It is suboptimal and involves
+I<XML::Simple> is used to generate the output. This is suboptimal and involves
 some hacks.
 
-During testing, the resulting files are not tested against the schema, which
+During testing the resulting files are not tested against the schema. This
 would be a good thing to do.
 
 =head1 CONTRIBUTING
 
-Source code for I<TAP::Harness::JUnit> is kept in a public GIT repository.
+Source code for I<TAP::Harness::JUnit> is kept in a public Git repository.
 Visit L<https://github.com/jlavallee/tap-harness-junit>.
 
-Bugs reports and feature enhancement requests are tracked at
+Bug reports and feature enhancement requests are tracked at
 L<https://rt.cpan.org/Public/Dist/Display.html?Name=TAP-Harness-JUnit>.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2008, 2009, 2010, 2011 I<TAP::Harness::JUnit> contributors.
-All rights reserved.
+Copyright 2008, 2009, 2010, 2011, 2012, 2013 I<TAP::Harness::JUnit>
+contributors. All rights reserved.
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+This program is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.
 
 =cut
 

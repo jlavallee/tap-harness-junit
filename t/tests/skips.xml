@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuites>
+  <testsuite name="Tests with skips" errors="0" failures="0" tests="5" time="0" skipped="2">
+    <system-out>1..5
+ok 1 - Test
+ok 2 - Test
+ok 3 - Test
+ok 4 # skip Skipping this test
+ok 5 # skip Skipping this test
+</system-out>
+    <testcase name="Test" classname="Tests with skips" time="0" />
+    <testcase name="Test (2)" classname="Tests with skips" time="0" />
+    <testcase name="Test (3)" classname="Tests with skips" time="0" />
+    <testcase name="Unnamed test case 3" classname="Tests with skips" time="0">
+      <skipped message="ok 4 # skip Skipping this test"></skipped>
+    </testcase>
+    <testcase name="Unnamed test case 4" classname="Tests with skips" time="0">
+      <skipped message="ok 5 # skip Skipping this test"></skipped>
+    </testcase>
+  </testsuite>
+</testsuites>

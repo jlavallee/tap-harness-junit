@@ -1,0 +1,6 @@
+1..5
+ok 1 - Test
+ok 2 - Test
+ok 3 - Test
+ok 4 # skip Skipping this test
+ok 5 # skip Skipping this test

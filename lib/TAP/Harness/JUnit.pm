@@ -234,6 +234,7 @@ sub parsetest {
 		'time' => $time,
 		testcase => [],
 		'system-out' => [''],
+		skipped => 0,
 	};
 
 	my $tests_run = 0;
@@ -264,8 +265,7 @@ sub parsetest {
 
 			# JUnit can't express these -- pretend they do not exist
 			$result->directive eq 'TODO' and next;
-			$result->directive eq 'SKIP' and next;
-
+			
 			my $test = {
 				'time' => $time,
 				name => $self->uniquename($xml, $result->description),
@@ -279,6 +279,13 @@ sub parsetest {
 					content => $comment,
 				}];
 				$xml->{failures}++;
+			};
+      
+			if ($result->directive eq 'SKIP') {
+				$test->{skipped} = [{
+					message => xmlsafe($result->raw),
+				}];
+				$xml->{skipped}++;
 			};
 
 			push @{$xml->{testcase}}, $test;

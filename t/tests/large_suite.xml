@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <testsuites>
-  <testsuite name="Large test suite to check for performance problems" errors="0" failures="0" tests="5000" time="0">
+  <testsuite name="Large test suite to check for performance problems" errors="0" failures="0" tests="5000" time="0" skipped="0">
     <system-out>1..5000
 ok 1
 ok 2

@@ -2,6 +2,7 @@ Build.PL			Build script generator
 ChangeLog			Log of Changes, duh
 lib/TAP/Harness/JUnit.pm	TAP::Harness::JUnit package
 MANIFEST			This list of files
+META.json
 META.yml			Metadata
 README.md			How to build and install
 t/large_suite.t

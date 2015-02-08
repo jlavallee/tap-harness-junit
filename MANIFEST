@@ -8,6 +8,9 @@ README.md			How to build and install
 t/large_suite.t
 t/outputs.t			Test that runs sample tests and compares outputs
 t/outputs_with_time.t
+t/package.t			test for $JUNIT_PACKAGE
+t/tests/badchars.txt
+t/tests/badchars.xml
 t/tests/badplan.txt
 t/tests/badplan.xml
 t/tests/earlyterm.txt
@@ -20,13 +23,14 @@ t/tests/large_suite.txt
 t/tests/large_suite.xml
 t/tests/nonutf8log.txt
 t/tests/nonutf8log.xml
+t/tests/package.qqq.xml
+t/tests/package.txt
+t/tests/package.xml
 t/tests/resultcode.txt
 t/tests/resultcode.xml
+t/tests/skips.txt
+t/tests/skips.xml
 t/tests/uniquename.txt
 t/tests/uniquename.xml
 t/use.t				Simple test
 t/xmlfile_default.t		Test that xmlfile argument is really optional
-t/package.t         test for $JUNIT_PACKAGE
-t/tests/package.qqq.xml
-t/tests/package.txt
-t/tests/package.xml

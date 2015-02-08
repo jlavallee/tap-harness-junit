@@ -16,6 +16,7 @@ my %tests = (
 	nonutf8log  => 'Special characters in log',
 	earlyterm   => 'Bad plan and non-zero return value',
 	empty       => 'Zero-length output',
+	skips       => 'Tests with skips',
 );
 
 plan tests => int (keys %tests);

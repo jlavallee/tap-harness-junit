@@ -430,6 +430,8 @@ sub next
 
 =head1 SEE ALSO
 
+I<TAP::Formatter::JUnit> at L<https://metacpan.org/pod/TAP::Formatter::JUnit>
+
 The JUnit XML schema was obtained from
 L<http://jra1mw.cvs.cern.ch:8180/cgi-bin/jra1mw.cgi/org.glite.testing.unit/config/JUnitXSchema.xsd?view=markup>.
 

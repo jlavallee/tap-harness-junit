@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <testsuites>
-  <testsuite name="Successful test with good plan and a bad return code" errors="0" failures="0" tests="1" time="0" skipped="0">
+  <testsuite name="Successful test with good plan and a bad return code" errors="0" failures="0" skipped="0" tests="1" time="0">
     <system-out>ok 1 - Success
 Died at t/tests/resultcode.pl line 6.
 1..1

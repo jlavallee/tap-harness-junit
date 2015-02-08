@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <testsuites>
-  <testsuite name="Bad plan and non_zero return value" errors="1" failures="1" tests="2" time="0" skipped="0">
+  <testsuite name="Bad plan and non_zero return value" errors="1" failures="1" skipped="0" tests="2" time="0">
     <system-out>1..2
 ok 1 - First
 Yielding non-zero return value at t/tests/earlyterm.pl line 6.

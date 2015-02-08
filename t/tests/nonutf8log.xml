@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <testsuites>
-  <testsuite name="Special characters in log" errors="0" failures="0" tests="3" time="0">
+  <testsuite name="Special characters in log" errors="0" failures="0" tests="3" time="0" skipped="0">
     <system-out>1..3
 ok 1 - First
 # �

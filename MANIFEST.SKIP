@@ -1,1 +1,26 @@
-^MYMETA\.yml$
+\B\.git\b
+\B\.gitignore\b
+\bMANIFEST\.bak
+\bMakefile$
+\bblib/
+\bBuild$
+\b_build/
+~$
+\.old$
+\#$
+\b\.#
+\.bak$
+\.tmp$
+\.#
+\.rej$
+\.sw[po]$
+\bcover_db\b
+^MYMETA\.
+^MANIFEST\.SKIP
+\bTAP-Harness-JUnit-[\d\.\_]+
+
+# Avoid OS-specific files/dirs
+# Mac OSX metadata
+\B\.DS_Store
+# Mac OSX SMB mount metadata files
+\B\._

@@ -11,6 +11,7 @@ use Encode;
 
 my %tests = (
 	resultcode  => 'Successful test with good plan and a bad return code',
+	badchars    => 'TAP output includes characers not valid in XML',
 	badplan     => 'Has a plan, successful tests, just too small amount of them',
 	funkyindent => 'Indentation of comments',
 	uniquename  => 'Multiple tests with identical names',

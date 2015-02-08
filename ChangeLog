@@ -4,23 +4,31 @@ Format inspired by WWW::Mechanize's revision log
 See Git history for more detailed listing:
 https://github.com/jlavallee/tap-harness-junit.git
 
-0.41    Thu Feb  7 21:16:24 2013 -0800
+0.42	Sun Feb  8 12:12:00 2015 -0800
+======================================
+[ENHANCEMENTS]
+Skip support from Toby Broyles
+[FIXES]
+RT98582 - escape null in XML output
+RT99597 - see also TAP::Formatter::JUnit
+
+0.41	Thu Feb  7 21:16:24 2013 -0800
 ======================================
 [ENHANCEMENTS]
 Expose namemangle option as environment variable by Finn Smith
 Documentation & whitespace cleanup by Finn Smith
 
-0.40    Sun Jan 27 12:35:00 2013 -0800
+0.40	Sun Jan 27 12:35:00 2013 -0800
 ======================================
 [FIXES]
 Fix for RT78933 by Malcolm Parsons
 
-0.39    Sun Jan 27 00:52:07 2013 -0800
+0.39	Sun Jan 27 00:52:07 2013 -0800
 ======================================
 [FIXES]
 Relax time test regex a bit for Windows
 
-0.38    Wed Nov  7 22:45:34 2012 -0800
+0.38	Wed Nov  7 22:45:34 2012 -0800
 ======================================
 [FIXES]
 Added Time::HiRes prereq added by David E. Wheeler

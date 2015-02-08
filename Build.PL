@@ -26,6 +26,9 @@ my $build = Module::Build->new(
 	},
 	build_requires => {
 		'Test::Deep'	=> 0,
+	},
+	configure_requires => {
+	    'Module::Build' => 0.42
 	}
 );
 

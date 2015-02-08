@@ -462,6 +462,8 @@ contributed code to I<TAP::Harness::JUnit>:
 
 =item Finn Smith
 
+=item Toby Broyles
+
 =back
 
 =head1 BUGS

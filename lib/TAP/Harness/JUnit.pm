@@ -14,6 +14,11 @@ TAP::Harness::JUnit - Generate JUnit compatible output from TAP results
         # ...
     });
     $harness->runtests(@tests);
+    
+    # set xmlfile via import()
+    use TAP::Harness::JUnit xmlfile => 'output.xml';
+    
+    prove --harness TAP::Harness::JUnit=xmlfile,output.xml
 
 =head1 DESCRIPTION
 
@@ -51,8 +56,9 @@ These options are added (compared to I<TAP::Harness>):
 Name of the file XML output will be saved to. If this argument is omitted, the
 default of "junit_output.xml" is used and a warning is issued.
 
-Alternatively, the name of the output file can be specified in the
-$JUNIT_OUTPUT_FILE environment variable
+Alternatively, the name of the output file can be specified either as a key/value
+pair when use-ing this module (see L<#DESCRIPTION>) or in the
+$JUNIT_OUTPUT_FILE environment variable.
 
 =item package
 
@@ -113,12 +119,22 @@ $JUNIT_NAME_MANGLE. (See namemangle documentation for available values.)
 
 =cut
 
+my $xmlfile_by_import;
+
+sub import {
+	my (undef, %args) = @_;
+	$xmlfile_by_import = delete $args{xmlfile};
+}
+
 sub new {
 	my ($class, $args) = @_;
 	$args ||= {};
 
 	# Process arguments
 	my $xmlfile = delete $args->{xmlfile};
+
+	$xmlfile = $xmlfile_by_import unless defined $xmlfile;
+
 	$xmlfile = $ENV{JUNIT_OUTPUT_FILE} unless defined $xmlfile;
 	unless ($xmlfile) {
 		$xmlfile = 'junit_output.xml';

@@ -1,16 +1,18 @@
 <?xml version='1.0' encoding='utf-8'?>
 <testsuites>
-  <testsuite name="TAP output includes characers not valid in XML" errors="0" failures="0" skipped="0" tests="5" time="0">
-    <system-out>1..5
+  <testsuite name="TAP output includes characers not valid in XML" errors="0" failures="0" skipped="0" tests="6" time="0">
+    <system-out>1..6
 ok 1 - ok text
 ok 2 - ok text
 ok 3 - null char &lt;00&gt;x00
-ok 4 - bad char &lt;19&gt;x19
-ok 5 - ok text
+ok 4 - bad char &lt;10&gt;x10
+ok 5 - bad char &lt;19&gt;x19
+ok 6 - ok text
 </system-out>
     <testcase name="ok text" classname="TAP output includes characers not valid in XML" time="0" />
     <testcase name="ok text (2)" classname="TAP output includes characers not valid in XML" time="0" />
     <testcase name="null char &lt;00&gt;x00 (2)" classname="TAP output includes characers not valid in XML" time="0" />
+    <testcase name="bad char &lt;10&gt;x10 (2)" classname="TAP output includes characers not valid in XML" time="0" />
     <testcase name="bad char &lt;19&gt;x19 (2)" classname="TAP output includes characers not valid in XML" time="0" />
     <testcase name="ok text (3)" classname="TAP output includes characers not valid in XML" time="0" />
   </testsuite>

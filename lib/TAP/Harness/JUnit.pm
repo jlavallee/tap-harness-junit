@@ -320,13 +320,13 @@ sub parsetest {
 		# Fake an error
 		push @{$xml->{testcase}}, {
 			'time' => $time,
-			name => $self->uniquename($xml, 'Number of runned tests does not match plan.'),
+			name => $self->uniquename($xml, 'Number of executed tests does not match plan.'),
 			classname => $prefixname,
 			failure => {
 				type => 'Plan',
 				message => ($xml->{errors} > 0
-					? 'Some test were not executed, The test died prematurely.'
-					: 'Extra tests tun.'),
+					? 'Some tests were not executed, the test died prematurely.'
+					: 'Extra tests run.'),
 				content => 'Bad plan',
 			},
 		};
@@ -399,7 +399,7 @@ sub xmlsafe {
 }
 
 # This is meant to transparently extend the parser chosen by user.
-# Dynamically superubclassed to the chosen parser upon harnsess construction.
+# Dynamically supersubclassed to the chosen parser upon harness construction.
 package TAP::Harness::JUnit::Parser;
 
 use Time::HiRes qw/time/;

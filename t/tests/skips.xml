@@ -11,10 +11,10 @@ ok 5 # skip Skipping this test
     <testcase name="Test" classname="Tests with skips" time="0" />
     <testcase name="Test (2)" classname="Tests with skips" time="0" />
     <testcase name="Test (3)" classname="Tests with skips" time="0" />
-    <testcase name="Unnamed test case 3" classname="Tests with skips" time="0">
+    <testcase name="Unnamed test case 1" classname="Tests with skips" time="0">
       <skipped message="ok 4 # skip Skipping this test" />
     </testcase>
-    <testcase name="Unnamed test case 4" classname="Tests with skips" time="0">
+    <testcase name="Unnamed test case 2" classname="Tests with skips" time="0">
       <skipped message="ok 5 # skip Skipping this test" />
     </testcase>
   </testsuite>

@@ -176,14 +176,14 @@ sub uniquename {
 	$self->{__test_names} = { map { $_->{name} => 1 } @{ $xml->{testcase} } }
 		unless $self->{__test_names};
 
+	my $number = $self->{__auto_number};
 	while(1) {
-		my $number = $self->{__auto_number};
 		$newname = $name
 				 ? $name.($number > 1 ? " ($number)" : '')
 				 : "Unnamed test case $number"
 		;
 		last unless exists $self->{__test_names}->{$newname};
-		$self->{__auto_number}++;
+		$number++;
 	};
 
 	$self->{__test_names}->{$newname}++;
